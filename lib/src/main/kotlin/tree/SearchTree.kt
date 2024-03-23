@@ -15,15 +15,9 @@ abstract class SearchTree<K: Comparable<K>, V, Node: BinaryTreeNode<K, V, Node>>
         constructor(pairs: Array<Pair<K, V>>): this(){
             set(pairs)
         }
-        protected fun insertNode(node: Node){
-            TODO("Insert node to tree")
-        }
-        protected fun removeNode(node: Node){
-            TODO("Remove node in tree")
-        }
-        protected fun createNode(key: K, value: V): Node{
-            TODO("Creating a tree node")
-        }
+        protected abstract fun insertNode(node: Node)
+        protected abstract fun removeNode(node: Node)
+        protected abstract fun createNode(key: K, value: V): Node
         protected fun searchNode(key: K): Node?{
             TODO("Finding a node in a tree by key")
         }
