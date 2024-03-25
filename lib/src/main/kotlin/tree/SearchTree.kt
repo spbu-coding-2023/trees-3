@@ -136,21 +136,21 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     /**
      * Apply [action] on all pairs by preorder tree traversal.
      */
-    fun preOrderTraversal(action: Pair<K, V>) {
+    fun preOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
         TODO("Prefix tree traversal")
     }
 
     /**
      * Apply [action] on all pairs by inorder tree traversal.
      */
-    fun inOrderTraversal(action: Pair<K, V>) {
+    fun inOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
         TODO("Symmetrical tree traversal")
     }
 
     /**
      * Apply [action] on all pairs by postorder tree traversal.
      */
-    fun postOrderTraversal(action: Pair<K, V>) {
+    fun postOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
         TODO("Postfix tree traversal")
     }
 }
