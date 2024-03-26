@@ -4,7 +4,7 @@ import tree.node.BSTreeNode
 
 class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>>() {
     override fun insertNode(node: BSTreeNode<K, V>) {
-        TODO("Insert node to tree")
+        TODO("Insert node to binory search tree")
     }
 
     override fun removeNode(node: BSTreeNode<K, V>) {
