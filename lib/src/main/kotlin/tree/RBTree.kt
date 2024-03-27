@@ -31,12 +31,12 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         node.color = RBTreeColor.RED
 
         if (node.parent == null) {
-            node.color = RBTreeColor.BLACK;
+            node.color = RBTreeColor.BLACK
             return
         }
 
         if (node.parent?.parent == null) {
-            return;
+            return
         }
 
         insertFix(node)
@@ -65,7 +65,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                         rightRotation(node)
                     }
                     parent.color = RBTreeColor.BLACK
-                    grandpa.color = RBTreeColor.RED;
+                    grandpa.color = RBTreeColor.RED
                     leftRotation(grandpa)
                 }
             } else {
@@ -94,7 +94,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
             }
         }
 
-        root?.color = RBTreeColor.BLACK;
+        root?.color = RBTreeColor.BLACK
     }
 
     override fun removeNode(node: RBTreeNode<K, V>) {
@@ -109,7 +109,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         val rightNode = node.right ?: return
 
         node.right = rightNode.left
-        rightNode.left?.parent = node;
+        rightNode.left?.parent = node
         rightNode.parent = node.parent
 
         val parent = node.parent
@@ -146,6 +146,6 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     }
 
     private fun throwError() {
-        throw UnknownError("Bug. Please contact with developer of library");
+        throw UnknownError("Bug. Please contact with developer of library")
     }
 }
