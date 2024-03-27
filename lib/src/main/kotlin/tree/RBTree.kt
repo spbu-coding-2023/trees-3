@@ -12,6 +12,6 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
     }
 
     override fun createNode(key: K, value: V): RBTreeNode<K, V> {
-        TODO("Create a node")
+        return RBTreeNode(key, value)
     }
 }
