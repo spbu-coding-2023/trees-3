@@ -1,12 +1,36 @@
 package tree
 
+import tree.node.RBTreeColor
 import tree.node.RBTreeNode
 
 class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
     override fun insertNode(node: RBTreeNode<K, V>) {
-        TODO("Insert node to tree")
+        var tmpNode = root
+        var tmpNodeParent: RBTreeNode<K, V>? = null
+        while (tmpNode != null) {
+            tmpNodeParent = tmpNode
+            tmpNode = if (node.key < tmpNode.key) tmpNode.left else tmpNode.right
+        }
+        node.parent = tmpNodeParent
+
+        if (tmpNodeParent == null) {
+            root = node
+        } else if (node.key < tmpNodeParent.key) {
+            tmpNodeParent.left = node
+        } else {
+            tmpNodeParent.right = node
+        }
+
+        node.left = null
+        node.right = null
+        node.color = RBTreeColor.RED
+
+        insertFixup(node)
     }
 
+    private fun insertFixup(node: RBTreeNode<K, V>) {
+        TODO()
+    }
     override fun removeNode(node: RBTreeNode<K, V>) {
         TODO("Remove node in tree")
     }
@@ -57,5 +81,9 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
         y.parent = x
 
         return true
+    }
+
+    private fun setNewRoot(root: RBTreeNode<K, V>) {
+        this.root = root
     }
 }
