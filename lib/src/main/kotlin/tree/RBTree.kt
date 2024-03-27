@@ -3,7 +3,11 @@ package tree
 import tree.node.RBTreeColor
 import tree.node.RBTreeNode
 
-class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
+class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
+    constructor() : super()
+    constructor(key: K, value: V) : super(key, value)
+    constructor(pairs: Array<Pair<K, V>>) : super(pairs)
+
     override fun insertNode(node: RBTreeNode<K, V>) {
         var tmpNode = root
         var tmpNodeParent: RBTreeNode<K, V>? = null
