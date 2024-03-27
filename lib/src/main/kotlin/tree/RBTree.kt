@@ -50,7 +50,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
             var grandpa = parent.parent ?: return
 
             if (parent == grandpa.right) {
-                val uncle = grandpa.right ?: return
+                val uncle = grandpa.left ?: return
 
                 if (uncle.color == RBTreeColor.RED) {
                     uncle.color = RBTreeColor.BLACK
