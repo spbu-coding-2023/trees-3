@@ -2,8 +2,12 @@ package tree
 
 import tree.node.BSTreeNode
 
-class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>>() {
-    
+class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
+
+    constructor() : super()
+    constructor(key: K, value: V) : super(key, value)
+    constructor(pairs: Array<Pair<K, V>>) : super(pairs)
+
     override fun insertNode(node: BSTreeNode<K, V>) {
         var parentNode = root;
         var treeNode = root;
