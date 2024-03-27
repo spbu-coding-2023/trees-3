@@ -3,8 +3,25 @@ package tree
 import tree.node.BSTreeNode
 
 class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>>() {
+    
     override fun insertNode(node: BSTreeNode<K, V>) {
-        TODO("Insert node to binory search tree")
+        var parentNode = root;
+        var treeNode = root;
+        while (treeNode != null) {
+            parentNode = treeNode;
+            if (node.key < treeNode.key) {
+                treeNode = treeNode.left
+            } else {
+                treeNode = treeNode.right
+            }
+        }
+        if (parentNode == null) {
+            root = node;
+        } else if (node.key < parentNode.key) {
+            parentNode.left = node;
+        } else {
+            parentNode.right = node;
+        }
     }
 
     override fun removeNode(node: BSTreeNode<K, V>) {
