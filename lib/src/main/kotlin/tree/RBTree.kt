@@ -7,12 +7,13 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
     override fun insertNode(node: RBTreeNode<K, V>) {
         var tmpNode = root
         var tmpNodeParent: RBTreeNode<K, V>? = null
+
         while (tmpNode != null) {
             tmpNodeParent = tmpNode
             tmpNode = if (node.key < tmpNode.key) tmpNode.left else tmpNode.right
         }
-        node.parent = tmpNodeParent
 
+        node.parent = tmpNodeParent
         if (tmpNodeParent == null) {
             root = node
         } else if (node.key < tmpNodeParent.key) {
@@ -25,12 +26,65 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
         node.right = null
         node.color = RBTreeColor.RED
 
-        insertFixup(node)
+        if (node.parent == null) {
+            node.color = RBTreeColor.BLACK;
+            return
+        }
+
+        if (node.parent?.parent == null) {
+            return;
+        }
+
+        insertFix(node)
     }
 
-    private fun insertFixup(node: RBTreeNode<K, V>) {
-        TODO()
+    private fun insertFix(newNode: RBTreeNode<K, V>) {
+        var node = newNode
+
+        while (node.parent?.color === RBTreeColor.RED) {
+            if (node.parent == node.parent?.parent?.right) {
+                val uncle = node.parent?.parent?.right
+
+                if (uncle?.color == RBTreeColor.RED) {
+                    uncle.color = RBTreeColor.BLACK
+                    node.parent?.color = RBTreeColor.BLACK
+                    node.parent?.parent?.color = RBTreeColor.RED
+                    node = node.parent?.parent ?: return
+                } else {
+                    if (node == node.parent?.left) {
+                        node = node.parent ?: return
+                        rightRotation(node)
+                    }
+                    node.parent?.color = RBTreeColor.BLACK
+                    node.parent?.parent?.color = RBTreeColor.RED;
+                    leftRotation(node.parent?.parent ?: return)
+                }
+            } else {
+                val uncle = node.parent?.parent?.right
+
+                if (uncle?.color == RBTreeColor.RED) {
+                    uncle.color = RBTreeColor.BLACK
+                    node.parent?.color = RBTreeColor.BLACK
+                    node.parent?.parent?.color = RBTreeColor.RED
+                    node = node.parent?.parent ?: return
+                } else {
+                    if (node == node.parent?.right) {
+                        node = node.parent ?: return
+                        leftRotation(node)
+                    }
+                    node.parent?.color = RBTreeColor.BLACK
+                    node.parent?.parent?.color = RBTreeColor.RED
+                    rightRotation(node.parent?.parent ?: return)
+                }
+            }
+            if (node == root) {
+                break
+            }
+        }
+
+        root?.color = RBTreeColor.BLACK;
     }
+
     override fun removeNode(node: RBTreeNode<K, V>) {
         TODO("Remove node in tree")
     }
