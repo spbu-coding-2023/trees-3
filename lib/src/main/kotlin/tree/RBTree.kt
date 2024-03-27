@@ -101,48 +101,44 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
         return RBTreeNode(key, value)
     }
 
-    private fun leftRotation(x: RBTreeNode<K, V>): Boolean {
-        val y = x.right ?: return false
+    private fun leftRotation(node: RBTreeNode<K, V>) {
+        val rightNode = node.right ?: return
 
-        x.right = y.left
-        y.left?.parent = x;
-        y.parent = x.parent
+        node.right = rightNode.left
+        rightNode.left?.parent = node;
+        rightNode.parent = node.parent
 
-        val parent = x.parent
+        val parent = node.parent
         if (parent == null) {
-            root = y
-        } else if (parent.left == x) {
-            parent.left = y
+            root = rightNode
+        } else if (parent.left == node) {
+            parent.left = rightNode
         } else {
-            parent.right = y
+            parent.right = rightNode
         }
 
-        y.left = x
-        x.parent = y
-
-        return true
+        rightNode.left = node
+        node.parent = rightNode
     }
 
-    private fun rightRotation(y: RBTreeNode<K, V>): Boolean {
-        val x = y.left ?: return false
+    private fun rightRotation(node: RBTreeNode<K, V>) {
+        val leftNode = node.left ?: return
 
-        y.left = x.right
-        x.right?.parent = y
-        x.parent = y.parent
+        node.left = leftNode.right
+        leftNode.right?.parent = node
+        leftNode.parent = node.parent
 
-        val parent = y.parent
+        val parent = node.parent
         if (parent == null) {
-            root = x
-        } else if (parent.left == y) {
-            parent.left = x
+            root = leftNode
+        } else if (parent.left == node) {
+            parent.left = leftNode
         } else {
-            parent.right = x
+            parent.right = leftNode
         }
 
-        x.right = y
-        y.parent = x
-
-        return true
+        leftNode.right = node
+        node.parent = leftNode
     }
 
     private fun setNewRoot(root: RBTreeNode<K, V>) {
