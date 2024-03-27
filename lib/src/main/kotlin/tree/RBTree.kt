@@ -42,41 +42,49 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
         var node = newNode
 
         while (node.parent?.color === RBTreeColor.RED) {
-            if (node.parent == node.parent?.parent?.right) {
-                val uncle = node.parent?.parent?.right
+            var parent = node.parent ?: return
+            var grandpa = parent.parent ?: return
 
-                if (uncle?.color == RBTreeColor.RED) {
+            if (parent == grandpa.right) {
+                val uncle = grandpa.right ?: return
+
+                if (uncle.color == RBTreeColor.RED) {
                     uncle.color = RBTreeColor.BLACK
-                    node.parent?.color = RBTreeColor.BLACK
-                    node.parent?.parent?.color = RBTreeColor.RED
-                    node = node.parent?.parent ?: return
+                    parent.color = RBTreeColor.BLACK
+                    grandpa.color = RBTreeColor.RED
+                    node = grandpa
                 } else {
-                    if (node == node.parent?.left) {
-                        node = node.parent ?: return
+                    if (node == parent.left) {
+                        node = parent
+                        parent = node.parent ?: return
+                        grandpa = parent.parent ?: return
                         rightRotation(node)
                     }
-                    node.parent?.color = RBTreeColor.BLACK
-                    node.parent?.parent?.color = RBTreeColor.RED;
-                    leftRotation(node.parent?.parent ?: return)
+                    parent.color = RBTreeColor.BLACK
+                    grandpa.color = RBTreeColor.RED;
+                    leftRotation(grandpa)
                 }
             } else {
-                val uncle = node.parent?.parent?.right
+                val uncle = grandpa.right ?: return
 
-                if (uncle?.color == RBTreeColor.RED) {
+                if (uncle.color == RBTreeColor.RED) {
                     uncle.color = RBTreeColor.BLACK
-                    node.parent?.color = RBTreeColor.BLACK
-                    node.parent?.parent?.color = RBTreeColor.RED
-                    node = node.parent?.parent ?: return
+                    parent.color = RBTreeColor.BLACK
+                    grandpa.color = RBTreeColor.RED
+                    node = grandpa
                 } else {
-                    if (node == node.parent?.right) {
-                        node = node.parent ?: return
+                    if (node == parent.right) {
+                        node = parent
+                        parent = node.parent ?: return
+                        grandpa = parent.parent ?: return
                         leftRotation(node)
                     }
-                    node.parent?.color = RBTreeColor.BLACK
-                    node.parent?.parent?.color = RBTreeColor.RED
-                    rightRotation(node.parent?.parent ?: return)
+                    parent.color = RBTreeColor.BLACK
+                    grandpa.color = RBTreeColor.RED
+                    rightRotation(grandpa)
                 }
             }
+            
             if (node == root) {
                 break
             }
