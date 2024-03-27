@@ -148,4 +148,8 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
     private fun setNewRoot(root: RBTreeNode<K, V>) {
         this.root = root
     }
+
+    private fun throwError() {
+        throw UnknownError("Bug. Please contact with developer of library");
+    }
 }
