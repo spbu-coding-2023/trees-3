@@ -84,7 +84,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
                     rightRotation(grandpa)
                 }
             }
-            
+
             if (node == root) {
                 break
             }
@@ -139,10 +139,6 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>>() {
 
         leftNode.right = node
         node.parent = leftNode
-    }
-
-    private fun setNewRoot(root: RBTreeNode<K, V>) {
-        this.root = root
     }
 
     private fun throwError() {
