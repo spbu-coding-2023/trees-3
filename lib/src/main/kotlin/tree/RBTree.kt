@@ -98,11 +98,61 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     }
 
     override fun removeNode(node: RBTreeNode<K, V>) {
-        var
+        var nodeTmp = node
+        val transplantedNode: RBTreeNode<K, V>?
+        var originalColor = nodeTmp.color
+
+        val leftNode = nodeTmp.left
+        val rightNode = nodeTmp.right
+        if (leftNode == null) {
+            transplantedNode = nodeTmp.right
+            rbTransplant(nodeTmp, nodeTmp.right)
+        } else if (rightNode == null) {
+            transplantedNode = nodeTmp.left
+            rbTransplant(nodeTmp, nodeTmp.left)
+        } else {
+            nodeTmp = minimum(rightNode)
+            originalColor = nodeTmp.color
+            transplantedNode = nodeTmp.right
+            if (nodeTmp.parent == node) {
+                transplantedNode?.parent = nodeTmp
+            } else {
+                rbTransplant(nodeTmp, nodeTmp.right)
+                nodeTmp.right = node.right
+                nodeTmp.right?.parent = nodeTmp;
+            }
+
+            rbTransplant(node, nodeTmp)
+            nodeTmp.left = node.left
+            nodeTmp.left?.parent = nodeTmp
+            nodeTmp.color = node.color
+        }
+
+        if (originalColor == RBTreeColor.BLACK) {
+            if (transplantedNode != null) {
+                deleteFix(transplantedNode)
+            }
+        }
     }
 
     override fun createNode(key: K, value: V): RBTreeNode<K, V> {
         return RBTreeNode(key, value)
+    }
+
+    private fun deleteFix(node: RBTreeNode<K, V>) {
+        TODO()
+    }
+
+    private fun minimum(node: RBTreeNode<K, V>): RBTreeNode<K, V> {
+        var node = node
+        var leftNode = node.left
+
+        while (leftNode !== null) {
+            node = leftNode
+            leftNode = node.left
+        }
+
+        return node
     }
 
     private fun rbTransplant(previous: RBTreeNode<K, V>, curr: RBTreeNode<K, V>?) {
