@@ -98,11 +98,27 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     }
 
     override fun removeNode(node: RBTreeNode<K, V>) {
-        TODO("Remove node in tree")
+        var
     }
 
     override fun createNode(key: K, value: V): RBTreeNode<K, V> {
         return RBTreeNode(key, value)
+    }
+
+    private fun rbTransplant(previous: RBTreeNode<K, V>, curr: RBTreeNode<K, V>?) {
+        val parent = previous.parent
+
+        if (parent == null) {
+            root = curr
+        } else if (previous == parent.left) {
+            parent.left = curr
+        } else {
+            parent.right = curr
+        }
+
+        if (curr != null) {
+            curr.parent = parent
+        }
     }
 
     private fun leftRotation(node: RBTreeNode<K, V>) {
