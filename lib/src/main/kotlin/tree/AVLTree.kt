@@ -12,6 +12,6 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
     }
 
     override fun createNode(key: K, value: V): AVLTreeNode<K, V> {
-        TODO("Create a node")
+        return AVLTreeNode(key, value)
     }
 }
