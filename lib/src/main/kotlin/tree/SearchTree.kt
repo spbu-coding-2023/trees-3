@@ -145,7 +145,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     /**
      * Returns the pair with previous ascending key
      */
-    fun predeccessor(key: K): Pair<K?, V?> {
+    fun predecessor(key: K): Pair<K?, V?> {
         TODO("Returns the previous ascending key")
     }
 
