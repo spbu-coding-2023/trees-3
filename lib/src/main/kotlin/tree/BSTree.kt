@@ -40,7 +40,15 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
         }
     }
 
-
+    private fun getMinSubtree(node: BSTreeNode<K, V>): BSTreeNode<K, V> {
+        val nodeN = node.left
+        if (nodeN == null) {
+            return node
+        } else {
+            return getMinSubtree(nodeN)
+        }
+    }
+    
     override fun removeNode(node: BSTreeNode<K, V>) {
         TODO("Remove node in tree")
     }
