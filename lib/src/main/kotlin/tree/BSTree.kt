@@ -48,9 +48,50 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
             return getMinSubtree(nodeN)
         }
     }
-    
+
     override fun removeNode(node: BSTreeNode<K, V>) {
-        TODO("Remove node in tree")
+        val parentNode = root?.let { searchParentNode(node, it) }
+
+        if (parentNode == null) {
+            root = null
+            return
+        }
+
+        if (node.left == null && node.right == null) {
+            if (parentNode.left == node) {
+                parentNode.left = null
+            } else {
+                parentNode.right = null
+            }
+
+        } else if (node.left == null || node.right == null) {
+            if (node.left == null) {
+
+                if (parentNode.left == node) {
+                    parentNode.left = node.right
+                } else {
+                    parentNode.right = node.right
+                }
+
+            } else {
+                if (parentNode.left == node) {
+                    parentNode.left = node.left
+                } else {
+                    parentNode.right = node.left
+                }
+            }
+        } else {
+            val successor = getMinSubtree(node);
+            removeNode(getMinSubtree(node));
+            successor.left = node.left
+            successor.right = node.right
+
+            if (parentNode.left == node) {
+                parentNode.left = successor
+            } else {
+                parentNode.right = successor
+            }
+        }
     }
 
     override fun createNode(key: K, value: V): BSTreeNode<K, V> {
