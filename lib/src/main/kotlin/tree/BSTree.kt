@@ -9,10 +9,10 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
     constructor(pairs: Array<Pair<K, V>>) : super(pairs)
 
     override fun insertNode(node: BSTreeNode<K, V>) {
-        var parentNode = root;
-        var treeNode = root;
+        var parentNode = root
+        var treeNode = root
         while (treeNode != null) {
-            parentNode = treeNode;
+            parentNode = treeNode
             if (node.key < treeNode.key) {
                 treeNode = treeNode.left
             } else {
@@ -20,11 +20,11 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
             }
         }
         if (parentNode == null) {
-            root = node;
+            root = node
         } else if (node.key < parentNode.key) {
-            parentNode.left = node;
+            parentNode.left = node
         } else {
-            parentNode.right = node;
+            parentNode.right = node
         }
     }
 
