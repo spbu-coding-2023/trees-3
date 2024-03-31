@@ -28,6 +28,19 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
         }
     }
 
+    private fun searchParentNode(node: BSTreeNode<K, V>, parentNode: BSTreeNode<K, V>): BSTreeNode<K, V>? {
+        if (parentNode.left == node || parentNode.right == node) {
+            return parentNode
+        }
+
+        if (node.key < parentNode.key) {
+            return parentNode.left?.let { searchParentNode(node, it) }
+        } else {
+            return parentNode.right?.let { searchParentNode(node, it) }
+        }
+    }
+
+
     override fun removeNode(node: BSTreeNode<K, V>) {
         TODO("Remove node in tree")
     }
