@@ -44,7 +44,18 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Stores the value for the given key. Return previous value.
      */
     fun set(key: K, value: V): V? {
-        TODO("Adding a node in a tree if there is no such node in the tree")
+        recentlyKey = key
+        val node = searchNode(key)
+
+        if (node == null) {
+            insertNode(createNode(key, value))
+            size++
+            return null
+        }
+
+        val result = node.value
+        node.value = value
+        return result
     }
 
     /**
