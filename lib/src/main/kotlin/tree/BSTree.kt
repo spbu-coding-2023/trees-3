@@ -46,7 +46,7 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
     }
 
     override fun createNode(key: K, value: V): BSTreeNode<K, V> {
-        val node = BSTreeNode(key, value);
-        return node;
+        val node = BSTreeNode(key, value)
+        return node
     }
 }
