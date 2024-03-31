@@ -11,6 +11,7 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
     override fun insertNode(node: BSTreeNode<K, V>) {
         var parentNode = root
         var treeNode = root
+
         while (treeNode != null) {
             parentNode = treeNode
             if (node.key < treeNode.key) {
@@ -19,6 +20,7 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
                 treeNode = treeNode.right
             }
         }
+        
         if (parentNode == null) {
             root = node
         } else if (node.key < parentNode.key) {
