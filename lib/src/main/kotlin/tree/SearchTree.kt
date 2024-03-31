@@ -25,7 +25,19 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Finding a node in a tree by key
      */
     protected fun searchNode(key: K): Node? {
-        TODO("Finding a node in a tree by key")
+        var node = root
+
+        while (node != null) {
+            if (key < node.key) {
+                node = node.left
+            } else if (key > node.key) {
+                node = node.right
+            } else {
+                return node
+            }
+        }
+
+        return null
     }
 
     /**
