@@ -74,7 +74,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Return the value for the given key.
      */
     fun search(key: K): V? {
-        TODO("Search by key")
+        return searchNode(key)?.value
     }
 
     /**
