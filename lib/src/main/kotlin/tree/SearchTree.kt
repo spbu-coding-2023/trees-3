@@ -174,7 +174,17 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Apply [action] on all pairs by postorder tree traversal.
      */
     fun postOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
-        TODO("Postfix tree traversal")
+        val root = this.root ?: return
+
+        fun helper(node: Node?) {
+            if (node == null) return
+
+            helper(node.left)
+            helper(node.right)
+            action(Pair(node.key, node.value))
+        }
+
+        helper(root)
     }
 }
 
