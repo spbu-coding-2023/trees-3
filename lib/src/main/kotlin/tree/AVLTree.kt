@@ -45,23 +45,13 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
         return nodeRight
     }
 
-    private fun insertRecursive(root: AVLTreeNode<K, V>?, node: AVLTreeNode<K, V>?): AVLTreeNode<K, V>? {
-        if (root == null) {
-            return node
-        } else if (node != null) {
-            if (root.key > node.key) {
-                root.left = insertRecursive(root.left, node)
-            } else  if (root.key < node.key) {
-                    root.right = insertRecursive(root.right, node)
-            }
-        }
-
+    private fun rebalanced(root: AVLTreeNode<K, V>?, node: AVLTreeNode<K, V>?): AVLTreeNode<K, V>?{
         updateHeight(root)
-        val balance = getBalance(root)
-        val rootLeft = root.left
-        val rootRight = root.right
+        val balance = root?.let { getBalance(it) }
+        val rootLeft = root?.left
+        val rootRight = root?.right
 
-        if (node != null){
+        if (node != null && balance != null){
             if (balance > 1) {
                 if (rootLeft != null) {
                     if (node.key < rootLeft.key) {
@@ -84,6 +74,19 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
             }
         }
         return root
+    }
+
+    private fun insertRecursive(root: AVLTreeNode<K, V>?, node: AVLTreeNode<K, V>?): AVLTreeNode<K, V>? {
+        if (root == null) {
+            return node
+        } else if (node != null) {
+            if (root.key > node.key) {
+                root.left = insertRecursive(root.left, node)
+            } else  if (root.key < node.key) {
+                    root.right = insertRecursive(root.right, node)
+            }
+        }
+        return rebalanced(root, node)
     }
 
     override fun insertNode(node: AVLTreeNode<K, V>) {
