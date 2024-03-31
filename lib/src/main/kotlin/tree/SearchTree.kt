@@ -25,14 +25,37 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Finding a node in a tree by key
      */
     protected fun searchNode(key: K): Node? {
-        TODO("Finding a node in a tree by key")
+        var node = root
+
+        while (node != null) {
+            if (key < node.key) {
+                node = node.left
+            } else if (key > node.key) {
+                node = node.right
+            } else {
+                return node
+            }
+        }
+
+        return null
     }
 
     /**
      * Stores the value for the given key. Return previous value.
      */
     fun set(key: K, value: V): V? {
-        TODO("Adding a node in a tree if there is no such node in the tree")
+        recentlyKey = key
+        val node = searchNode(key)
+
+        if (node == null) {
+            insertNode(createNode(key, value))
+            size++
+            return null
+        }
+
+        val result = node.value
+        node.value = value
+        return result
     }
 
     /**
@@ -122,7 +145,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     /**
      * Returns the pair with previous ascending key
      */
-    fun predeccessor(key: K): Pair<K?, V?> {
+    fun predecessor(key: K): Pair<K?, V?> {
         TODO("Returns the previous ascending key")
     }
 
@@ -151,7 +174,17 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Apply [action] on all pairs by postorder tree traversal.
      */
     fun postOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
-        TODO("Postfix tree traversal")
+        val root = this.root ?: return
+
+        fun helper(node: Node?) {
+            if (node == null) return
+
+            helper(node.left)
+            helper(node.right)
+            action(Pair(node.key, node.value))
+        }
+
+        helper(root)
     }
 }
 
