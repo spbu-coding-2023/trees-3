@@ -52,27 +52,26 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
         val rootRight = root?.right
 
         if (node != null && balance != null){
-            if (balance > 1) {
-                if (rootLeft != null) {
-                    if (node.key < rootLeft.key) {
-                        return rotateRight(root)
-                    } else {
-                        root.left = root.left?.let { rotateLeft(it) }
-                        return rotateRight(root)
-                    }
+            if (balance > 1 && rootLeft != null) {
+                if (node.key < rootLeft.key) {
+
+                    return rotateRight(root)
+                }
+
+                root.left = root.left?.let { rotateLeft(it) }
+                return rotateRight(root)
+            }
+
+            if (balance < -1 && rootRight != null) {
+                if (node.key > rootRight.key) {
+                    return rotateLeft(root)
+                }
+
+                    root.right = root.right?.let { rotateRight(it) }
+
+                    return rotateLeft(root)
                 }
             }
-            if (balance < -1) {
-                if (rootRight != null) {
-                    if (node.key > rootRight.key) {
-                        return rotateLeft(root)
-                    } else {
-                        root.right = root.right?.let { rotateRight(it) }
-                        return rotateLeft(root)
-                    }
-                }
-            }
-        }
 
         return root
     }
@@ -86,7 +85,7 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
             if (root.key > node.key) {
                 root.left = insertRecursive(root.left, node)
             } else  if (root.key < node.key) {
-                    root.right = insertRecursive(root.right, node)
+                root.right = insertRecursive(root.right, node)
             }
         }
 
@@ -101,8 +100,10 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
         var current = node
         val curLeft = current.left
         while (curLeft != null) current = curLeft
+
         return current
     }
+
     private fun removeRecursive(root: AVLTreeNode<K, V>?, node: AVLTreeNode<K, V>): AVLTreeNode<K, V>? {
         var rootNode = root
 
@@ -112,18 +113,20 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
 
         if (rootNode.key > node.key) {
             rootNode.left = removeRecursive(rootNode.left, node)
+            return rebalanced(rootNode, node)
         } else if (rootNode.key < node.key) {
             rootNode.right = removeRecursive(rootNode.right, node)
+            return rebalanced(rootNode, node)
+        }
+
+        val rootNodeRight = rootNode.right
+        val rootNodeLeft = rootNode.left
+        if (rootNode.left == null || rootNode.right == null) {
+            rootNode = if (rootNode.left == null) rootNodeRight else rootNodeLeft
         } else {
-            val rootNodeRight = rootNode.right
-            val rootNodeLeft = rootNode.left
-            if (rootNode.left == null || rootNode.right == null) {
-                rootNode = if (rootNode.left == null) rootNodeRight else rootNodeLeft
-            } else {
-                val mostLeftChild: AVLTreeNode<K, V>? = rootNode.right?.let { minValueNode(it) }
-                rootNode = mostLeftChild
-                rootNode?.right = rootNode?.let { removeRecursive(rootNode.right, it) }
-            }
+            val mostLeftChild: AVLTreeNode<K, V>? = rootNode.right?.let { minValueNode(it) }
+            rootNode = mostLeftChild
+            rootNode?.right = rootNode?.let { removeRecursive(rootNode.right, it) }
         }
 
         if (rootNode == null) {
