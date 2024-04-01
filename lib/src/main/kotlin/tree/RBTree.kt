@@ -98,40 +98,39 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     }
 
     override fun removeNode(node: RBTreeNode<K, V>) {
-        var nodeTmp = node
         val transplantedNode: RBTreeNode<K, V>?
-        var originalColor = nodeTmp.color
 
-        val leftNode = nodeTmp.left
-        val rightNode = nodeTmp.right
+        var originalColor = node.color
+        val leftNode = node.left
+        val rightNode = node.right
+
         if (leftNode == null) {
-            transplantedNode = nodeTmp.right
-            rbTransplant(nodeTmp, nodeTmp.right)
+            transplantedNode = rightNode
+            rbTransplant(node, rightNode)
         } else if (rightNode == null) {
-            transplantedNode = nodeTmp.left
-            rbTransplant(nodeTmp, nodeTmp.left)
+            transplantedNode = leftNode
+            rbTransplant(node, leftNode)
         } else {
-            nodeTmp = minimum(rightNode)
-            originalColor = nodeTmp.color
-            transplantedNode = nodeTmp.right
-            if (nodeTmp.parent == node) {
-                transplantedNode?.parent = nodeTmp
+            val minNode = minimum(rightNode)
+
+            originalColor = minNode.color
+            transplantedNode = minNode.right
+            if (minNode.parent == node) {
+                transplantedNode?.parent = minNode
             } else {
-                rbTransplant(nodeTmp, nodeTmp.right)
-                nodeTmp.right = node.right
-                nodeTmp.right?.parent = nodeTmp;
+                rbTransplant(minNode, minNode.right)
+                minNode.right = node.right
+                minNode.right?.parent = minNode
             }
 
-            rbTransplant(node, nodeTmp)
-            nodeTmp.left = node.left
-            nodeTmp.left?.parent = nodeTmp
-            nodeTmp.color = node.color
+            rbTransplant(node, minNode)
+            minNode.left = node.left
+            minNode.left?.parent = minNode
+            minNode.color = node.color
         }
 
-        if (originalColor == RBTreeColor.BLACK) {
-            if (transplantedNode != null) {
-                deleteFix(transplantedNode)
-            }
+        if (originalColor == RBTreeColor.BLACK && transplantedNode != null) {
+            deleteFix(transplantedNode)
         }
     }
 
@@ -143,16 +142,14 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         TODO()
     }
 
-    private fun minimum(node: RBTreeNode<K, V>): RBTreeNode<K, V> {
-        var node = node
-        var leftNode = node.left
+    private tailrec fun minimum(node: RBTreeNode<K, V>): RBTreeNode<K, V> {
+        val leftNode = node.left
 
-        while (leftNode !== null) {
-            node = leftNode
-            leftNode = node.left
+        if (leftNode == null) {
+            return node
+        } else {
+            return minimum(leftNode)
         }
-
-        return node
     }
 
     private fun rbTransplant(previous: RBTreeNode<K, V>, curr: RBTreeNode<K, V>?) {
