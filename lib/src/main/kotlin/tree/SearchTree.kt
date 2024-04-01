@@ -99,19 +99,31 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     fun search(key: K): V? {
         return searchNode(key)?.value
     }
-    
+
     /**
      * Returns a complete list of keys.
      */
-    fun getKeys(): Array<K> {
-        TODO("Returns a complete list of keys")
+    fun getKeys(): List<K> {
+        val result = listOf<K>()
+
+        inOrderTraversal {
+            result.addLast(it.first)
+        }
+
+        return result
     }
 
     /**
      * Returns a complete list of values.
      */
-    fun getValues(): Array<V> {
-        TODO("Returns a complete list of values")
+    fun getValues(): List<V> {
+        val result = listOf<V>()
+
+        inOrderTraversal {
+            result.addLast(it.second)
+        }
+
+        return result
     }
 
     /**
@@ -207,7 +219,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
                 inOrder(node.right)
             }
         }
-        
+
         inOrder(this.root)
     }
 
