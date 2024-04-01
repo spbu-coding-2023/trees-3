@@ -62,11 +62,11 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                         node = parent
                         parent = node.parent ?: return
                         grandpa = parent.parent ?: return
-                        rightRotation(node)
+                        rightRotate(node)
                     }
                     parent.color = RBTreeColor.BLACK
                     grandpa.color = RBTreeColor.RED
-                    leftRotation(grandpa)
+                    leftRotate(grandpa)
                 }
             } else {
                 val uncle = grandpa.right ?: return
@@ -81,11 +81,11 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                         node = parent
                         parent = node.parent ?: return
                         grandpa = parent.parent ?: return
-                        leftRotation(node)
+                        leftRotate(node)
                     }
                     parent.color = RBTreeColor.BLACK
                     grandpa.color = RBTreeColor.RED
-                    rightRotation(grandpa)
+                    rightRotate(grandpa)
                 }
             }
 
@@ -111,7 +111,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
             transplantedNode = leftNode
             rbTransplant(node, leftNode)
         } else {
-            val minNode = minimum(rightNode)
+            val minNode = getMinNode(rightNode)
 
             originalColor = minNode.color
             transplantedNode = minNode.right
@@ -150,7 +150,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                 if (uncle.color == RBTreeColor.RED) {
                     uncle.color = RBTreeColor.BLACK
                     parentNode.color = RBTreeColor.RED
-                    leftRotation(parentNode)
+                    leftRotate(parentNode)
                     uncle = parentNode.right ?: return
                 }
 
@@ -161,14 +161,14 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                     if (uncle.right?.color == RBTreeColor.BLACK) {
                         uncle.left?.color = RBTreeColor.BLACK
                         uncle.color = RBTreeColor.RED
-                        rightRotation(uncle)
+                        rightRotate(uncle)
                         uncle = parentNode.right ?: return
                     }
 
                     uncle.color = parentNode.color
                     parentNode.color = RBTreeColor.BLACK
                     uncle.right?.color = RBTreeColor.BLACK
-                    leftRotation(parentNode)
+                    leftRotate(parentNode)
                     node = root
                 }
             } else {
@@ -177,7 +177,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                 if (uncle.color == RBTreeColor.RED) {
                     uncle.color = RBTreeColor.BLACK
                     parentNode.color = RBTreeColor.RED
-                    rightRotation(parentNode)
+                    rightRotate(parentNode)
                     uncle = parentNode.left ?: return
                 }
 
@@ -188,27 +188,27 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                     if (uncle.left?.color == RBTreeColor.BLACK) {
                         uncle.right?.color = RBTreeColor.BLACK
                         uncle.color = RBTreeColor.RED
-                        leftRotation(uncle)
+                        leftRotate(uncle)
                         uncle = parentNode.left ?: return
                     }
 
                     uncle.color = parentNode.color
                     parentNode.color = RBTreeColor.BLACK
                     uncle.left?.color = RBTreeColor.BLACK
-                    rightRotation(parentNode)
+                    rightRotate(parentNode)
                     node = root
                 }
             }
         }
     }
 
-    private tailrec fun minimum(node: RBTreeNode<K, V>): RBTreeNode<K, V> {
+    private tailrec fun getMinNode(node: RBTreeNode<K, V>): RBTreeNode<K, V> {
         val leftNode = node.left
 
         if (leftNode == null) {
             return node
         } else {
-            return minimum(leftNode)
+            return getMinNode(leftNode)
         }
     }
 
@@ -228,7 +228,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         }
     }
 
-    private fun leftRotation(node: RBTreeNode<K, V>) {
+    private fun leftRotate(node: RBTreeNode<K, V>) {
         val rightNode = node.right ?: return
 
         node.right = rightNode.left
@@ -248,7 +248,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         node.parent = rightNode
     }
 
-    private fun rightRotation(node: RBTreeNode<K, V>) {
+    private fun rightRotate(node: RBTreeNode<K, V>) {
         val leftNode = node.left ?: return
 
         node.left = leftNode.right
