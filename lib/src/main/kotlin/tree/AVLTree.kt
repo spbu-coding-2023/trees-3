@@ -97,9 +97,13 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
     }
 
     private fun minValueNode(node: AVLTreeNode<K, V>): AVLTreeNode<K, V> {
-        var current = node
-        val curLeft = current.left
-        while (curLeft != null) current = curLeft
+        var current: AVLTreeNode<K, V> = node
+        var leftNode = current.left
+
+        while (leftNode != null) {
+            current = leftNode
+            leftNode = current.left
+        }
 
         return current
     }
