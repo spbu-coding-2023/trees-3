@@ -144,7 +144,14 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Apply [action] on all pairs by inorder tree traversal.
      */
     fun inOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
-        TODO("Symmetrical tree traversal")
+        fun inOrder(node: Node?) {
+            if (node != null) {
+                inOrder(node.left)
+                action(Pair(node.key, node.value))
+                inOrder(node.right)
+            }
+        }
+        inOrder(this.root)
     }
 
     /**
