@@ -116,7 +116,19 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns the pair with next ascending key
      */
     fun successor(key: K): Pair<K?, V?> {
-        TODO("Returns the next ascending key")
+        var node = root
+        var successor: Node? = null
+
+        while (node != null) {
+            if (node.key > key) {
+                successor = node
+                node = node.left
+            } else {
+                node = node.right
+            }
+        }
+
+        return Pair(successor?.key, successor?.value)
     }
 
     /**
