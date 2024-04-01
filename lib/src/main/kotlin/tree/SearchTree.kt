@@ -110,6 +110,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
         while (node?.left != null) {
             node = node.left
         }
+
         return Pair(node?.key, node?.value)
     }
 
@@ -183,6 +184,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
                 inOrder(node.right)
             }
         }
+        
         inOrder(this.root)
     }
 
