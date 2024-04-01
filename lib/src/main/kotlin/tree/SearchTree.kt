@@ -97,9 +97,9 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Return the value for the given key.
      */
     fun search(key: K): V? {
-        TODO("Search by key")
+        return searchNode(key)?.value
     }
-
+    
     /**
      * Returns a complete list of keys.
      */
@@ -118,14 +118,23 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns a complete list of pairs key value.
      */
     fun getEntities(): Array<Pair<K, V>> {
-        TODO("Returns a complete list of pair key value")
+        val result = emptyArray<Pair<K, V>>()
+        var index = 0
+
+        inOrderTraversal { result[index] = it; index++ }
+        return result
     }
 
     /**
      * Returns pair with the minimum key.
      */
     fun getMin(): Pair<K?, V?> {
-        TODO("Returns nodes with the minimum key")
+        var node = root
+        while (node?.left != null) {
+            node = node.left
+        }
+
+        return Pair(node?.key, node?.value)
     }
 
     /**
@@ -139,14 +148,38 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns the pair with next ascending key
      */
     fun successor(key: K): Pair<K?, V?> {
-        TODO("Returns the next ascending key")
+        var node = root
+        var successor: Node? = null
+
+        while (node != null) {
+            if (node.key > key) {
+                successor = node
+                node = node.left
+            } else {
+                node = node.right
+            }
+        }
+
+        return Pair(successor?.key, successor?.value)
     }
 
     /**
      * Returns the pair with previous ascending key
      */
     fun predecessor(key: K): Pair<K?, V?> {
-        TODO("Returns the previous ascending key")
+        var node = root
+        var predecessor: Node? = root?.left
+
+        while (node != null) {
+            if (node.key < key) {
+                predecessor = node
+                node = node.right
+            } else {
+                node = node.left
+            }
+        }
+
+        return Pair(predecessor?.key, predecessor?.value)
     }
 
     /**
@@ -167,7 +200,15 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Apply [action] on all pairs by inorder tree traversal.
      */
     fun inOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
-        TODO("Symmetrical tree traversal")
+        fun inOrder(node: Node?) {
+            if (node != null) {
+                inOrder(node.left)
+                action(Pair(node.key, node.value))
+                inOrder(node.right)
+            }
+        }
+        
+        inOrder(this.root)
     }
 
     /**
@@ -187,4 +228,3 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
         helper(root)
     }
 }
-
