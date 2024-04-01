@@ -267,8 +267,4 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         leftNode.right = node
         node.parent = leftNode
     }
-
-    private fun throwError() {
-        throw UnknownError("Bug. Please contact with developer of library")
-    }
 }
