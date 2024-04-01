@@ -121,12 +121,12 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
 
         val rootNodeRight = rootNode.right
         val rootNodeLeft = rootNode.left
-        if (rootNode.left == null || rootNode.right == null) {
-            rootNode = if (rootNode.left == null) rootNodeRight else rootNodeLeft
+        if (rootNodeLeft == null || rootNodeRight == null) {
+            rootNode = rootNodeLeft ?: rootNodeRight
         } else {
-            val mostLeftChild: AVLTreeNode<K, V>? = rootNode.right?.let { minValueNode(it) }
+            val mostLeftChild: AVLTreeNode<K, V> = minValueNode(rootNodeRight)
             rootNode = mostLeftChild
-            rootNode?.right = rootNode?.let { removeRecursive(rootNode.right, it) }
+            rootNode.right = removeRecursive(rootNode.right, rootNode)
         }
 
         if (rootNode == null) {
