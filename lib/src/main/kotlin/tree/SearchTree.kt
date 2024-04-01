@@ -102,7 +102,11 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns pair with the minimum key.
      */
     fun getMin(): Pair<K?, V?> {
-        TODO("Returns nodes with the minimum key")
+        var node = root
+        while (node?.left != null) {
+            node = node.left
+        }
+        return Pair(node?.key, node?.value)
     }
 
     /**
