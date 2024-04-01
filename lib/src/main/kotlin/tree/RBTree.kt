@@ -138,8 +138,68 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         return RBTreeNode(key, value)
     }
 
-    private fun deleteFix(node: RBTreeNode<K, V>) {
-        TODO()
+    private fun deleteFix(transplantedNode: RBTreeNode<K, V>) {
+        var node: RBTreeNode<K, V>? = transplantedNode
+
+        while (node != root && node?.color == RBTreeColor.BLACK) {
+            val parentNode = node.parent ?: return
+
+            if (node == parentNode.left) {
+                var uncle = parentNode.right ?: return
+
+                if (uncle.color == RBTreeColor.RED) {
+                    uncle.color = RBTreeColor.BLACK
+                    parentNode.color = RBTreeColor.RED
+                    leftRotation(parentNode)
+                    uncle = parentNode.right ?: return
+                }
+
+                if (uncle.left?.color == RBTreeColor.BLACK && uncle.right?.color == RBTreeColor.BLACK) {
+                    uncle.color = RBTreeColor.RED
+                    node = parentNode
+                } else {
+                    if (uncle.right?.color == RBTreeColor.BLACK) {
+                        uncle.left?.color = RBTreeColor.BLACK
+                        uncle.color = RBTreeColor.RED
+                        rightRotation(uncle)
+                        uncle = parentNode.right ?: return
+                    }
+
+                    uncle.color = parentNode.color
+                    parentNode.color = RBTreeColor.BLACK
+                    uncle.right?.color = RBTreeColor.BLACK
+                    leftRotation(parentNode)
+                    node = root
+                }
+            } else {
+                var uncle = parentNode.left ?: return
+
+                if (uncle.color == RBTreeColor.RED) {
+                    uncle.color = RBTreeColor.BLACK
+                    parentNode.color = RBTreeColor.RED
+                    rightRotation(parentNode)
+                    uncle = parentNode.left ?: return
+                }
+
+                if (uncle.right?.color == RBTreeColor.BLACK && uncle.right?.color == RBTreeColor.BLACK) {
+                    uncle.color = RBTreeColor.RED
+                    node = parentNode
+                } else {
+                    if (uncle.left?.color == RBTreeColor.BLACK) {
+                        uncle.right?.color = RBTreeColor.BLACK
+                        uncle.color = RBTreeColor.RED
+                        leftRotation(uncle)
+                        uncle = parentNode.left ?: return
+                    }
+
+                    uncle.color = parentNode.color
+                    parentNode.color = RBTreeColor.BLACK
+                    uncle.left?.color = RBTreeColor.BLACK
+                    rightRotation(parentNode)
+                    node = root
+                }
+            }
+        }
     }
 
     private tailrec fun minimum(node: RBTreeNode<K, V>): RBTreeNode<K, V> {
