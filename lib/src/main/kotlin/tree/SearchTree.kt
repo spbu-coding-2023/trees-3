@@ -122,8 +122,20 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     /**
      * Returns the pair with previous ascending key
      */
-    fun predeccessor(key: K): Pair<K?, V?> {
-        TODO("Returns the previous ascending key")
+    fun predecessor(key: K): Pair<K?, V?> {
+        var node = root
+        var predecessor: Node? = root?.left
+
+        while (node != null) {
+            if (node.key < key) {
+                predecessor = node
+                node = node.right
+            } else {
+                node = node.left
+            }
+        }
+
+        return Pair(predecessor?.key, predecessor?.value)
     }
 
     /**
