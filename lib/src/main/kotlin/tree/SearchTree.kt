@@ -95,7 +95,11 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns a complete list of pairs key value.
      */
     fun getEntities(): Array<Pair<K, V>> {
-        TODO("Returns a complete list of pair key value")
+        val result = emptyArray<Pair<K, V>>()
+        var index = 0
+
+        inOrderTraversal { result[index] = it; index++ }
+        return result
     }
 
     /**
