@@ -104,10 +104,10 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns a complete list of keys.
      */
     fun getKeys(): List<K> {
-        val result = listOf<K>()
+        val result = mutableListOf<K>()
 
         inOrderTraversal {
-            result.addLast(it.first)
+            result.add(it.first)
         }
 
         return result
@@ -117,10 +117,10 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns a complete list of values.
      */
     fun getValues(): List<V> {
-        val result = listOf<V>()
+        val result = mutableListOf<V>()
 
         inOrderTraversal {
-            result.addLast(it.second)
+            result.add(it.second)
         }
 
         return result
