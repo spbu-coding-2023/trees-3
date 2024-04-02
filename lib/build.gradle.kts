@@ -11,6 +11,7 @@ plugins {
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
+    jacoco
 }
 
 repositories {
@@ -24,6 +25,7 @@ dependencies {
 
     // Use the JUnit 5 integration.
     testImplementation(libs.junit.jupiter.engine)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
@@ -44,4 +46,16 @@ java {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.named("test")) // tests are required to run before generating the report
+
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+    }
 }
