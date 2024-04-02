@@ -86,7 +86,16 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Stores the value for the given key if there is no pair with that key. Return previous value.
      */
     fun setIfEmpty(key: K, value: V): V? {
-        TODO("Adding a node if such a node already exists in the tree")
+        val node = searchNode(key)
+
+        if (node == null) {
+            recentlyKey = key
+            insertNode(createNode(key, value))
+            size++
+            return null
+        }
+
+        return node.value
     }
 
     /**
