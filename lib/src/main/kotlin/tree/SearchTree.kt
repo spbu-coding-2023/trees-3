@@ -267,7 +267,8 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Remove all keys in a tree.
      */
     fun clear() {
-        TODO("Removing all nodes in a tree")
+        root = null
+        size = 0
     }
 
     /**
