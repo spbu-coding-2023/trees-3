@@ -65,18 +65,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
         val listValue = mutableListOf<V?>()
 
         for (pair in pairs) {
-            recentlyKey = pair.first
-            val nodeToInsert = searchNode(pair.first)
-
-            if (nodeToInsert == null) {
-                insertNode(createNode(pair.first, pair.second))
-                size++
-                listValue.add(null)
-            } else {
-                val result = nodeToInsert.value
-                nodeToInsert.value = pair.second
-                listValue.add(result)
-            }
+            listValue.add(set(pair.first, pair.second))
         }
 
         return listValue
@@ -105,17 +94,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
         val listValue = mutableListOf<V?>()
 
         for (pair in pairs) {
-            val node = searchNode(pair.first)
-
-            if (node == null) {
-                recentlyKey = pair.first
-                insertNode(createNode(pair.first, pair.second))
-                size++
-                listValue.add(null)
-            }
-            else{
-                listValue.add(node.value)
-            }
+            listValue.add(setIfEmpty(pair.first, pair.second))
         }
 
         return listValue
@@ -143,16 +122,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
         val listValue = mutableListOf<V?>()
 
         for (key in keys) {
-            val node = searchNode(key)
-
-            if (node != null) {
-                removeNode(node)
-                size--
-                listValue.add(node.value)
-            }
-            else {
-                listValue.add(null)
-            }
+            listValue.add(remove(key))
         }
 
         return listValue
