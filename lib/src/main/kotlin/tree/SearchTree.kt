@@ -218,7 +218,11 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns pair with the maximum key.
      */
     fun getMax(): Pair<K?, V?> {
-        TODO("Returns nodes with the maximum key")
+        var node = root
+        while (node?.right != null) {
+            node = node.right
+        }
+        return Pair(node?.key, node?.value)
     }
 
     /**
