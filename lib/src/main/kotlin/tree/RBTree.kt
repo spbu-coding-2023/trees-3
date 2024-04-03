@@ -9,6 +9,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     constructor(pairs: Array<Pair<K, V>>) : super(pairs)
 
     override fun insertNode(node: RBTreeNode<K, V>) {
+        // put node like we are in BST
         var tmpNode = root
         var tmpNodeParent: RBTreeNode<K, V>? = null
 
@@ -17,25 +18,22 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
             tmpNode = if (node.key < tmpNode.key) tmpNode.left else tmpNode.right
         }
 
-        node.parent = tmpNodeParent
+        // that mean tree is empty
         if (tmpNodeParent == null) {
             root = node
-        } else if (node.key < tmpNodeParent.key) {
+            node.color = RBTreeColor.BLACK
+            return
+        }
+
+        node.parent = tmpNodeParent
+        if (node.key < tmpNodeParent.key) {
             tmpNodeParent.left = node
         } else {
             tmpNodeParent.right = node
         }
 
-        node.left = null
-        node.right = null
-        node.color = RBTreeColor.RED
-
-        if (node.parent == null) {
-            node.color = RBTreeColor.BLACK
-            return
-        }
-
-        if (node.parent?.parent == null) {
+        // if node has no grandpa all fine
+        if (tmpNodeParent.parent == null) {
             return
         }
 
