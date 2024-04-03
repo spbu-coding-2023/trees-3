@@ -10,59 +10,71 @@ class BSTreeTest {
     private lateinit var bstTwoNode: BSTree<Int, String>
     private val bstEmpty = BSTree<Int, String>()
 
-    @BeforeEach
-    fun setup() {
-        bst = BSTree()
-        bst.set(2, "B")
-        bst.set(3, "C")
-        bst.set(4, "D")
-        bst.set(6, "F")
-        bst.set(7, "G")
-        bst.set(8, "H")
-    }
-
     @Nested
     inner class `Insert tests` {
+        @BeforeEach
+        fun setup() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(3, "C")
+            bst.set(4, "D")
+            bst.set(6, "F")
+            bst.set(7, "G")
+            bst.set(8, "H")
+        }
+
         @Test
         fun `set new min key`() {
-            assertEquals(null, bst.set(1, "A"))
-            assertEquals(Pair(1, "A"), bst.getMin())
-            assertEquals(Pair(1, "A"), bst.predecessor(2))
+            bst.set(1, "A")
             assertEquals(7, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(1, "A"), Pair(2, "B"), Pair(3, "C"), Pair(4, "D"),
+                    Pair(6, "F"), Pair(7, "G"), Pair(8, "H")
+                ), bst.getEntities()
+            )
         }
 
         @Test
         fun `set new max key`() {
-            assertEquals(null, bst.set(9, "I"))
-            assertEquals(Pair(9, "I"), bst.getMax())
-            assertEquals(Pair(9, "I"), bst.successor(8))
+            bst.set(9, "I")
             assertEquals(7, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(2, "B"), Pair(3, "C"), Pair(4, "D"),
+                    Pair(6, "F"), Pair(7, "G"), Pair(8, "H"), Pair(9, "I")
+                ), bst.getEntities()
+            )
         }
 
         @Test
         fun `set new key inside tree`() {
-            assertEquals(null, bst.set(5, "E"))
-            assertEquals("E", bst.search(5))
-            assertEquals(Pair(5, "E"), bst.predecessor(6))
-            assertEquals(Pair(5, "E"), bst.successor(4))
+            bst.set(5, "E")
             assertEquals(7, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(2, "B"), Pair(3, "C"), Pair(4, "D"), Pair(5, "E"),
+                    Pair(6, "F"), Pair(7, "G"), Pair(8, "H")
+                ), bst.getEntities()
+            )
         }
 
         @Test
         fun `set the same key`() {
-            assertEquals("G", bst.set(7, "g"))
-            assertEquals("g", bst.search(7))
-            assertEquals(Pair(7, "g"), bst.predecessor(8))
-            assertEquals(Pair(7, "g"), bst.successor(6))
+            bst.set(7, "g")
             assertEquals(6, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(2, "B"), Pair(3, "C"), Pair(4, "D"),
+                    Pair(6, "F"), Pair(7, "g"), Pair(8, "H")
+                ), bst.getEntities()
+            )
         }
 
         @Test
         fun `set key in empty tree`() {
             bstEmpty.set(1, "A")
             assertEquals(listOf(Pair(1, "A")), bstEmpty.getEntities())
-            assertEquals(Pair(null, null), bstEmpty.predecessor(1))
-            assertEquals(Pair(null, null), bstEmpty.successor(1))
             assertEquals(1, bstEmpty.size)
         }
     }
@@ -71,7 +83,6 @@ class BSTreeTest {
     inner class `Remove tests` {
 
         @Test
-
         fun `remove key without child`() {
             bstTwoNode = BSTree()
             bstTwoNode.set(2, "B")
