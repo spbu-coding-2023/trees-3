@@ -275,7 +275,18 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Apply [action] on all pairs by preorder tree traversal.
      */
     fun preOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
-        TODO("Prefix tree traversal")
+        val root = this.root ?: return
+
+        fun preOrder(node: Node?) {
+            if (node == null) return
+
+            action(Pair(node.key, node.value))
+            preOrder(node.left)
+            preOrder(node.right)
+
+        }
+
+        preOrder(root)
     }
 
     /**
