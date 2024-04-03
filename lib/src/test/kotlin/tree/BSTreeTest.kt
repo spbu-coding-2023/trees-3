@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 
 class BSTreeTest {
     private lateinit var bst: BSTree<Int, String>
+    private lateinit var bstTwoNode: BSTree<Int, String>
     private val bstEmpty = BSTree<Int, String>()
 
     @BeforeEach
@@ -26,6 +27,7 @@ class BSTreeTest {
         fun `set new min key`() {
             assertEquals(null, bst.set(1, "A"))
             assertEquals(Pair(1, "A"), bst.getMin())
+            assertEquals(Pair(1, "A"), bst.predecessor(2))
             assertEquals(7, bst.size)
         }
 
@@ -33,6 +35,7 @@ class BSTreeTest {
         fun `set new max key`() {
             assertEquals(null, bst.set(9, "I"))
             assertEquals(Pair(9, "I"), bst.getMax())
+            assertEquals(Pair(9, "I"), bst.successor(8))
             assertEquals(7, bst.size)
         }
 
@@ -66,12 +69,16 @@ class BSTreeTest {
 
     @Nested
     inner class `Remove tests` {
+
         @Test
+
         fun `remove key without child`() {
-            assertEquals("B", bst.remove(2))
-            assertEquals(Pair(3, "C"), bst.getMin())
-            assertEquals(Pair(null, null), bst.predecessor(3))
-            assertEquals(5, bst.size)
+            bstTwoNode = BSTree()
+            bstTwoNode.set(2, "B")
+            bstTwoNode.set(3, "C")
+            assertEquals("B", bstTwoNode.remove(2))
+            assertEquals(1, bstTwoNode.size)
+            assertEquals(Pair(3, "C"), bstTwoNode.getMin())
         }
 
         @Test
@@ -84,14 +91,12 @@ class BSTreeTest {
 
         @Test
         fun `remove key that is not in the tree`() {
-            assertEquals("A", bst.remove(1))
-            //
+            assertEquals(null, bst.remove(1))
         }
 
         @Test
         fun `remove key from empty tree`() {
-            assertEquals("A", bstEmpty.remove(1))
-            //
+            assertEquals(null, bstEmpty.remove(1))
         }
     }
 
