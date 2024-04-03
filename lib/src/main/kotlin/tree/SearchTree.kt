@@ -125,7 +125,15 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Remove the value for the given key. Return previous value.
      */
     fun remove(key: K): V? {
-        TODO("Adding multiple nodes if such nodes already exist in the tree")
+        val node = searchNode(key)
+
+        if (node != null) {
+            removeNode(node)
+            size--
+            return node.value
+        }
+
+        return null
     }
 
     /**
