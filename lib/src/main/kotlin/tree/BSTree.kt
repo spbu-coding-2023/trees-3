@@ -63,7 +63,7 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
         val parentNode = root?.let { searchParentNode(node, it) }
 
         if (parentNode == null) {
-            root = null
+            root = node.right
             return
         }
 
