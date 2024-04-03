@@ -61,36 +61,71 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     /**
      * Stores the values for the given keys. Return previous values.
      */
-    fun set(pairs: Array<Pair<K, V>>): Array<V?> {
-        TODO("Adding multiple node in a tree if there is no such node in the tree")
+    fun set(pairs: Array<Pair<K, V>>): MutableList<V?> {
+        val listValue = mutableListOf<V?>()
+
+        for (pair in pairs) {
+            listValue.add(set(pair.first, pair.second))
+        }
+
+        return listValue
     }
 
     /**
      * Stores the value for the given key if there is no pair with that key. Return previous value.
      */
     fun setIfEmpty(key: K, value: V): V? {
-        TODO("Adding a node if such a node already exists in the tree")
+        val node = searchNode(key)
+
+        if (node == null) {
+            recentlyKey = key
+            insertNode(createNode(key, value))
+            size++
+            return null
+        }
+
+        return node.value
     }
 
     /**
      * Stores the values for the given keys if there is no pair with that key. Return previous values.
      */
-    fun setIfEmpty(pairs: Array<Pair<K, V>>): Array<V?> {
-        TODO("Adding several nodes if such a node already exists in the tree")
+    fun setIfEmpty(pairs: Array<Pair<K, V>>): MutableList<V?> {
+        val listValue = mutableListOf<V?>()
+
+        for (pair in pairs) {
+            listValue.add(setIfEmpty(pair.first, pair.second))
+        }
+
+        return listValue
     }
 
     /**
      * Remove the value for the given key. Return previous value.
      */
     fun remove(key: K): V? {
-        TODO("Adding multiple nodes if such nodes already exist in the tree")
+        val node = searchNode(key)
+
+        if (node != null) {
+            removeNode(node)
+            size--
+            return node.value
+        }
+
+        return null
     }
 
     /**
      * Remove the values for the given keys. Return previous values.
      */
-    fun remove(keys: Array<K>): Array<V?> {
-        TODO("Removing multiple catches by keys")
+    fun remove(keys: Array<K>): MutableList<V?> {
+        val listValue = mutableListOf<V?>()
+
+        for (key in keys) {
+            listValue.add(remove(key))
+        }
+
+        return listValue
     }
 
     /**
@@ -153,7 +188,11 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Returns pair with the maximum key.
      */
     fun getMax(): Pair<K?, V?> {
-        TODO("Returns nodes with the maximum key")
+        var node = root
+        while (node?.right != null) {
+            node = node.right
+        }
+        return Pair(node?.key, node?.value)
     }
 
     /**
@@ -198,14 +237,26 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      * Remove all keys in a tree.
      */
     fun clear() {
-        TODO("Removing all nodes in a tree")
+        root = null
+        size = 0
     }
 
     /**
      * Apply [action] on all pairs by preorder tree traversal.
      */
     fun preOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
-        TODO("Prefix tree traversal")
+        val root = this.root ?: return
+
+        fun preOrder(node: Node?) {
+            if (node == null) return
+
+            action(Pair(node.key, node.value))
+            preOrder(node.left)
+            preOrder(node.right)
+
+        }
+
+        preOrder(root)
     }
 
     /**
