@@ -101,8 +101,24 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     /**
      * Stores the values for the given keys if there is no pair with that key. Return previous values.
      */
-    fun setIfEmpty(pairs: Array<Pair<K, V>>): Array<V?> {
-        TODO("Adding several nodes if such a node already exists in the tree")
+    fun setIfEmpty(pairs: Array<Pair<K, V>>): MutableList<V?> {
+        val listValue = mutableListOf<V?>()
+
+        for (pair in pairs) {
+            val node = searchNode(pair.first)
+
+            if (node == null) {
+                recentlyKey = pair.first
+                insertNode(createNode(pair.first, pair.second))
+                size++
+                listValue.add(null)
+            }
+            else{
+                listValue.add(node.value)
+            }
+        }
+
+        return listValue
     }
 
     /**
