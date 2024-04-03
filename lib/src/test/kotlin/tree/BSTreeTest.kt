@@ -115,8 +115,8 @@ class BSTreeTest {
     inner class `Create tests` {
         @Test
         fun `insert new node`() {
-            assertEquals(null, bst.set(1, "A"))
-            assertEquals("A", bst.search(1))
+            bst = BSTree(1, "A")
+            assertEquals(listOf(Pair(1, "A")), bst.getEntities())
         }
     }
 }
