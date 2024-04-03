@@ -139,8 +139,23 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
     /**
      * Remove the values for the given keys. Return previous values.
      */
-    fun remove(keys: Array<K>): Array<V?> {
-        TODO("Removing multiple catches by keys")
+    fun remove(keys: Array<K>): MutableList<V?> {
+        val listValue = mutableListOf<V?>()
+
+        for (key in keys) {
+            val node = searchNode(key)
+
+            if (node != null) {
+                removeNode(node)
+                size--
+                listValue.add(node.value)
+            }
+            else {
+                listValue.add(null)
+            }
+        }
+
+        return listValue
     }
 
     /**
