@@ -24,7 +24,7 @@ class RBTreeTest {
     }
 
     private fun checkValues(data: Array<Pair<Int, String>>) {
-        data.forEach {
+        data.distinctBy { it.first }.forEach {
             checkValue(it.first, it.second)
         }
     }
@@ -112,11 +112,74 @@ class RBTreeTest {
         }
 
         @Test
-        fun `insert 1`() {
-            val rbt = RBTree<Int, Int?>()
-            val setWithNull: (Int) -> (Unit) = { key -> rbt.set(key, null) }
+        fun `set third key as right child`() {
+            val data = arrayOf(2 to "Homka", 1 to "Dima", 3 to "Nastya")
+            setTest(data)
+        }
 
-            listOf(35, 21, 25, 62, 12, 62, 122, 621, 121, 362, 35, 523).forEach(setWithNull)
+        @Test
+        fun `set third key as root from left`() {
+            val data = arrayOf(3 to "Homka", 2 to "Dima", 1 to "Nastya")
+            setTest(data)
+        }
+
+        @Test
+        fun `set third key as root from right`() {
+            val data = arrayOf(1 to "Homka", 2 to "Dima", 3 to "Nastya")
+            setTest(data)
+        }
+
+        @Test
+        fun `set key to the left when uncle is red`() {
+            val data = arrayOf(5 to "Homka", 10 to "Dima", 15 to "Nastya", 7 to "Rodion")
+            setTest(data)
+        }
+
+        @Test
+        fun `set key to the right when uncle is red`() {
+            val data = arrayOf(5 to "Homka", 10 to "Dima", 15 to "Nastya", 17 to "Rodion")
+            setTest(data)
+        }
+
+        @Test
+        fun `set key to the left when uncle is black and parent red`() {
+            val data = arrayOf(15 to "Homka", 10 to "Dima", 5 to "Nastya", 1 to "Rodion", 6 to "spisladqo")
+            setTest(data)
+        }
+
+        @Test
+        fun `set key to the left when uncle is null and parent red`() {
+            val data = arrayOf(
+                5 to "Homka", 10 to "Dima", 15 to "Nastya", 20 to "Rodion",
+                25 to "spisladqo", 30 to "Vichislav Zorich", 27 to "Sibiri4ok"
+            )
+            setTest(data)
+        }
+
+        @Test
+        fun `set key to the right when uncle is black and parent red`() {
+            val data = arrayOf(1 to "Homka", 5 to "Dima", 10 to "Nastya", 15 to "Rodion", 14 to "spisladqo")
+            setTest(data)
+        }
+
+        @Test
+        fun `set key to the right when uncle is null and parent red`() {
+            val data = arrayOf(
+                30 to "Homka", 25 to "Dima", 20 to "Nastya", 15 to "Rodion",
+                10 to "spisladqo", 5 to "Vichislav Zorich", 6 to "Sibiri4ok"
+            )
+            setTest(data)
+        }
+
+        @Test
+        fun `set some random keys`() {
+            val data = arrayOf(
+                35 to "Homka", 21 to "Dima", 25 to "Nastya", 622 to "Rodion",
+                12 to "spisladqo", 62 to "Vichislav Zorich", 122 to "Sibiri4ok",
+                621 to "kotenok-barista", 121 to "vlad zavtra v zal", 362 to "karim",
+                36 to "seriy cardinal", 523 to "katya", 251 to "sonechka"
+            )
+            setTest(data)
         }
 
         @Test
