@@ -9,6 +9,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     constructor(pairs: Array<Pair<K, V>>) : super(pairs)
 
     override fun insertNode(node: RBTreeNode<K, V>) {
+        // put node like we are in BST
         var tmpNode = root
         var tmpNodeParent: RBTreeNode<K, V>? = null
 
@@ -17,25 +18,22 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
             tmpNode = if (node.key < tmpNode.key) tmpNode.left else tmpNode.right
         }
 
-        node.parent = tmpNodeParent
+        // that mean tree is empty
         if (tmpNodeParent == null) {
             root = node
-        } else if (node.key < tmpNodeParent.key) {
+            node.color = RBTreeColor.BLACK
+            return
+        }
+
+        node.parent = tmpNodeParent
+        if (node.key < tmpNodeParent.key) {
             tmpNodeParent.left = node
         } else {
             tmpNodeParent.right = node
         }
 
-        node.left = null
-        node.right = null
-        node.color = RBTreeColor.RED
-
-        if (node.parent == null) {
-            node.color = RBTreeColor.BLACK
-            return
-        }
-
-        if (node.parent?.parent == null) {
+        // if node has no grandpa all fine
+        if (tmpNodeParent.parent == null) {
             return
         }
 
@@ -46,52 +44,58 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         var node = newNode
 
         while (node.parent?.color === RBTreeColor.RED) {
-            var parent = node.parent ?: return
-            var grandpa = parent.parent ?: return
+            var parent = node.parent ?: throw IllegalStateException()
+            var grandpa = parent.parent ?: throw IllegalStateException()
 
-            if (parent == grandpa.right) {
-                val uncle = grandpa.left ?: return
+            if (parent == grandpa.left) {
+                val uncle = grandpa.right
 
-                if (uncle.color == RBTreeColor.RED) {
+                // uncle is red
+                if (uncle != null && uncle.color == RBTreeColor.RED) {
                     uncle.color = RBTreeColor.BLACK
                     parent.color = RBTreeColor.BLACK
                     grandpa.color = RBTreeColor.RED
                     node = grandpa
-                } else {
-                    if (node == parent.left) {
-                        node = parent
-                        parent = node.parent ?: return
-                        grandpa = parent.parent ?: return
-                        rightRotate(node)
-                    }
-                    parent.color = RBTreeColor.BLACK
-                    grandpa.color = RBTreeColor.RED
-                    leftRotate(grandpa)
+                    continue
                 }
-            } else {
-                val uncle = grandpa.right ?: return
 
-                if (uncle.color == RBTreeColor.RED) {
-                    uncle.color = RBTreeColor.BLACK
-                    parent.color = RBTreeColor.BLACK
-                    grandpa.color = RBTreeColor.RED
-                    node = grandpa
-                } else {
-                    if (node == parent.right) {
-                        node = parent
-                        parent = node.parent ?: return
-                        grandpa = parent.parent ?: return
-                        leftRotate(node)
-                    }
-                    parent.color = RBTreeColor.BLACK
-                    grandpa.color = RBTreeColor.RED
-                    rightRotate(grandpa)
+                // uncle is black (null node = black)
+                if (node == parent.right) {
+                    node = parent
+                    leftRotate(node)
+                    parent = node.parent ?: throw IllegalStateException()
+                    grandpa = parent.parent ?: throw IllegalStateException()
                 }
+
+                parent.color = RBTreeColor.BLACK
+                grandpa.color = RBTreeColor.RED
+                rightRotate(grandpa)
+                continue
             }
 
-            if (node == root) {
-                break
+            // parent is right child of grandpa
+            val uncle = grandpa.left
+
+            // uncle is red
+            if (uncle != null && uncle.color == RBTreeColor.RED) {
+                uncle.color = RBTreeColor.BLACK
+                parent.color = RBTreeColor.BLACK
+                grandpa.color = RBTreeColor.RED
+                node = grandpa
+                continue
             }
+
+            // uncle is black
+            if (node == parent.left) {
+                node = parent
+                rightRotate(node)
+                parent = node.parent ?: throw IllegalStateException()
+                grandpa = parent.parent ?: throw IllegalStateException()
+            }
+
+            parent.color = RBTreeColor.BLACK
+            grandpa.color = RBTreeColor.RED
+            leftRotate(grandpa)
         }
 
         root?.color = RBTreeColor.BLACK
@@ -138,11 +142,15 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
         return RBTreeNode(key, value)
     }
 
+    private fun isBlack(node: RBTreeNode<K, V>?): Boolean {
+        return node == null || node.color == RBTreeColor.BLACK
+    }
+
     private fun deleteFix(transplantedNode: RBTreeNode<K, V>) {
         var node: RBTreeNode<K, V>? = transplantedNode
 
         while (node != root && node?.color == RBTreeColor.BLACK) {
-            val parentNode = node.parent ?: return
+            val parentNode = node.parent ?: throw IllegalStateException()
 
             if (node == parentNode.left) {
                 var uncle = parentNode.right ?: return
@@ -154,15 +162,15 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                     uncle = parentNode.right ?: return
                 }
 
-                if (uncle.left?.color == RBTreeColor.BLACK && uncle.right?.color == RBTreeColor.BLACK) {
+                if (isBlack(uncle.left) && isBlack(uncle.right)) {
                     uncle.color = RBTreeColor.RED
                     node = parentNode
                 } else {
-                    if (uncle.right?.color == RBTreeColor.BLACK) {
+                    if (isBlack(uncle.right)) {
                         uncle.left?.color = RBTreeColor.BLACK
                         uncle.color = RBTreeColor.RED
                         rightRotate(uncle)
-                        uncle = parentNode.right ?: return
+                        uncle = parentNode.right ?: throw IllegalStateException()
                     }
 
                     uncle.color = parentNode.color
@@ -181,15 +189,15 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
                     uncle = parentNode.left ?: return
                 }
 
-                if (uncle.right?.color == RBTreeColor.BLACK && uncle.right?.color == RBTreeColor.BLACK) {
+                if (isBlack(uncle.left) && isBlack(uncle.right)) {
                     uncle.color = RBTreeColor.RED
                     node = parentNode
                 } else {
-                    if (uncle.left?.color == RBTreeColor.BLACK) {
+                    if (isBlack(uncle.left)) {
                         uncle.right?.color = RBTreeColor.BLACK
                         uncle.color = RBTreeColor.RED
                         leftRotate(uncle)
-                        uncle = parentNode.left ?: return
+                        uncle = parentNode.left ?: throw IllegalStateException()
                     }
 
                     uncle.color = parentNode.color
@@ -229,7 +237,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     }
 
     private fun leftRotate(node: RBTreeNode<K, V>) {
-        val rightNode = node.right ?: return
+        val rightNode = node.right ?: throw IllegalStateException()
 
         node.right = rightNode.left
         rightNode.left?.parent = node
@@ -249,7 +257,7 @@ class RBTree<K : Comparable<K>, V> : SearchTree<K, V, RBTreeNode<K, V>> {
     }
 
     private fun rightRotate(node: RBTreeNode<K, V>) {
-        val leftNode = node.left ?: return
+        val leftNode = node.left ?: throw IllegalStateException()
 
         node.left = leftNode.right
         leftNode.right?.parent = node
