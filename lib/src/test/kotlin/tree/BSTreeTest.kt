@@ -10,6 +10,36 @@ class BSTreeTest {
     private val bstEmpty = BSTree<Int, String>()
 
     @Nested
+    inner class `Constructor tests` {
+        @Test
+        fun `tree without args`() {
+            val bst = BSTree<Int, String>()
+            assertEquals(0, bst.size)
+        }
+
+        @Test
+        fun `tree with one arg`() {
+            val bst = BSTree(1, "A")
+            assertEquals(listOf(Pair(1, "A")), bst.getEntities())
+        }
+
+        @Test
+        fun `tree with some args`() {
+            val bst: BSTree<Int, String> = BSTree(
+                arrayOf(
+                    Pair(1, "A"),
+                    Pair(2, "B"),
+                    Pair(3, "C"),
+                )
+            )
+
+            assertEquals(3, bst.size)
+            assertEquals(listOf(Pair(1, "A"), Pair(2, "B"), Pair(3, "C")), bst.getEntities())
+        }
+    }
+
+
+    @Nested
     inner class `Insert tests` {
         @BeforeEach
         fun setup() {
@@ -138,10 +168,10 @@ class BSTreeTest {
             bst.set(2, "B")
             bst.set(1, "A")
             bst.set(0, "Z")
-            bst.set(8, "F")
-            bst.set(3, "D")
+            bst.set(8, "K")
+            bst.set(3, "C")
             bst.set(5, "E")
-            bst.set(4, "F")
+            bst.set(4, "D")
             bst.set(6, "F")
             assertEquals("B", bst.remove(2))
             assertEquals(7, bst.size)
