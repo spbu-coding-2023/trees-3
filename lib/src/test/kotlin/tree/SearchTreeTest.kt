@@ -98,4 +98,123 @@ class SearchTreeTest {
             assertEquals(Pair(8, "A"), bst.predecessor(10))
         }
     }
+
+    @Nested
+    inner class `Getting test` {
+        @Test
+        fun `tree with node`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(3, "C")
+            bst.set(4, "D")
+            bst.set(6, "F")
+            bst.set(7, "G")
+            bst.set(8, "H")
+
+            assertEquals(listOf(2, 3, 4, 6, 7, 8), bst.getKeys())
+            assertEquals(listOf("B", "C", "D", "F", "G", "H"), bst.getValues())
+            assertEquals(
+                listOf(Pair(2, "B"), Pair(3, "C"), Pair(4, "D"), Pair(6, "F"), Pair(7, "G"), Pair(8, "H")),
+                bst.getEntities()
+            )
+        }
+
+        @Test
+        fun `empty tree`() {
+            val bstEmpty = BSTree<Int, String>()
+
+            assertEquals(listOf<Int>(), bstEmpty.getKeys())
+            assertEquals(listOf<String>(), bstEmpty.getValues())
+            assertEquals(listOf<Pair<Int, String>>(), bstEmpty.getEntities())
+        }
+    }
+
+    @Nested
+    inner class `Search test` {
+        @Test
+        fun `tree with node`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(3, "C")
+            bst.set(4, "D")
+
+            assertEquals("B", bst.search(2))
+        }
+
+        @Test
+        fun `empty tree`() {
+            val bstEmpty = BSTree<Int, String>()
+
+            assertEquals(null, bstEmpty.search(2))
+        }
+    }
+
+
+    @Nested
+    inner class `Traversal methods` {
+        @Test
+        fun `inOrderTraversal return empty list on empty tree`() {
+            val rbt = BSTree<Int, String>()
+            val result = mutableListOf<Int>()
+
+            rbt.inOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(), result)
+        }
+
+        @Test
+        fun `inOrderTraversal return keys in inOrder order`() {
+            val bst = BSTree<Int, String>()
+            bst.set(arrayOf(1 to "Homka", 2 to "Dima", 3 to "Nastya"))
+
+            val result = mutableListOf<Int>()
+            bst.inOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(1, 2, 3), bst.getKeys())
+        }
+
+        @Test
+        fun `preOrderTraversal return empty list on empty tree`() {
+            val rbt = RBTree<Int, String>()
+            val result = mutableListOf<Int>()
+
+            rbt.preOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(), result)
+        }
+
+        @Test
+        fun `preOrderTraversal return keys in preorder order`() {
+            val bst = BSTree<Int, String>()
+            bst.set(arrayOf(2 to "Homka", 1 to "Dima", 3 to "Nastya"))
+
+            val result = mutableListOf<Int>()
+            bst.preOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(2, 1, 3), result)
+        }
+
+        @Test
+        fun `postOrderTraversal return empty list on empty tree`() {
+            val rbt = RBTree<Int, String>()
+            val result = mutableListOf<Int>()
+
+            rbt.preOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(), result)
+        }
+
+        @Test
+        fun `postOrderTraversal return keys in preorder order`() {
+            val bst = BSTree<Int, String>()
+            bst.set(arrayOf(2 to "Homka", 1 to "Dima", 3 to "Nastya"))
+
+            val result = mutableListOf<Int>()
+            bst.postOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(1, 3, 2), result)
+        }
+    }
 }
+
+
