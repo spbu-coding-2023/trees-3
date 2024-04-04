@@ -177,7 +177,9 @@ class RBTreeTest {
                 35 to "Homka", 21 to "Dima", 25 to "Nastya", 622 to "Rodion",
                 12 to "spisladqo", 62 to "Vichislav Zorich", 122 to "Sibiri4ok",
                 621 to "kotenok-barista", 121 to "vlad zavtra v zal", 362 to "karim",
-                36 to "seriy cardinal", 523 to "katya", 251 to "sonechka"
+                36 to "seriy cardinal", 523 to "katya", 251 to "sonechka", 9352 to "qrutyy misha",
+                513 to "little hamster", 462 to "nameless kitty", 2395 to "therain7",
+                3252 to "vacman", 1352 to "homerizde", 723 to "kvas"
             )
             setTest(data)
         }
