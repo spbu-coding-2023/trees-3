@@ -9,6 +9,33 @@ import org.junit.jupiter.api.Nested
 class RBTreeTest {
     private lateinit var rbt: RBTree<Int, String>
 
+    private fun checkSize(size: Long, rbt: RBTree<Int, String> = this.rbt) {
+        assertEquals(size, rbt.size)
+        checkCountNodes(size.toInt(), rbt)
+    }
+
+    private fun checkCountNodes(count: Int, rbt: RBTree<Int, String> = this.rbt) {
+        assertEquals(count, rbt.getEntities().size)
+    }
+
+    private fun checkValue(key: Int, value: String, rbt: RBTree<Int, String> = this.rbt) {
+        assertEquals(value, rbt.search(key))
+    }
+
+    private fun checkValues(data: Array<Pair<Int, String>>) {
+        data.forEach {
+            checkValue(it.first, it.second)
+        }
+    }
+
+    private fun checkKeys(keys: List<Int>, rbt: RBTree<Int, String> = this.rbt) {
+        assertEquals(keys.distinct().sorted(), rbt.getKeys())
+    }
+
+    private fun checkKeys(keys: Array<Pair<Int, String>>, rbt: RBTree<Int, String> = this.rbt) {
+        assertEquals(keys.map { it.first }.distinct().sorted(), rbt.getKeys())
+    }
+
     @BeforeEach
     fun setup() {
         rbt = RBTree()
@@ -18,8 +45,8 @@ class RBTreeTest {
     inner class `Constructor tests` {
         @Test
         fun `without args`() {
-            assertEquals(0, RBTree<Int, String>().size)
-            assertEquals(0, RBTree<Int, String>().getEntities().size)
+            val rbt = RBTree<Int, String>()
+            checkSize(0, rbt)
         }
 
         @Test
@@ -31,23 +58,23 @@ class RBTreeTest {
         @Test
         fun `array of entities`() {
             val entities = arrayOf(
-                Pair(35, 1),
-                Pair(21, 1),
-                Pair(25, 1),
-                Pair(62, 1),
-                Pair(12, 1),
-                Pair(62, 1),
-                Pair(122, 1),
-                Pair(621, 1),
-                Pair(121, 1),
-                Pair(362, 1),
-                Pair(35, 1),
-                Pair(523, 1),
+                Pair(35, "A"),
+                Pair(21, "A"),
+                Pair(25, "A"),
+                Pair(62, "A"),
+                Pair(12, "A"),
+                Pair(62, "A"),
+                Pair(122, "A"),
+                Pair(621, "A"),
+                Pair(121, "A"),
+                Pair(362, "A"),
+                Pair(35, "A"),
+                Pair(523, "A"),
             )
 
-            val rbt = RBTree(entities)
-            assertEquals(10, rbt.size)
-            assertEquals(listOf(12, 21, 25, 35, 62, 121, 122, 362, 523, 621), rbt.getKeys())
+            val rbt: RBTree<Int, String> = RBTree(entities)
+            checkSize(10, rbt)
+            checkKeys(entities.map { it.first }.distinct().sorted(), rbt)
         }
     }
 
