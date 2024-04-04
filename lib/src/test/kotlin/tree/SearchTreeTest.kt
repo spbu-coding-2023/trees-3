@@ -128,6 +128,27 @@ class SearchTreeTest {
             assertEquals(listOf<Pair<Int, String>>(), bstEmpty.getEntities())
         }
     }
+
+    @Nested
+    inner class `Search test` {
+        @Test
+        fun `tree with node`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(3, "C")
+            bst.set(4, "D")
+
+            assertEquals("B", bst.search(2))
+        }
+
+        @Test
+        fun `empty tree`() {
+            val bstEmpty = BSTree<Int, String>()
+
+            assertEquals(null, bstEmpty.search(2))
+        }
+    }
+
 }
 
 
