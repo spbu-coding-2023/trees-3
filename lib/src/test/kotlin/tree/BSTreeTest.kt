@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 
 class BSTreeTest {
     private lateinit var bst: BSTree<Int, String>
-    private lateinit var bstTwoNode: BSTree<Int, String>
     private val bstEmpty = BSTree<Int, String>()
 
     @Nested
@@ -83,31 +82,145 @@ class BSTreeTest {
     inner class `Remove tests` {
 
         @Test
-        fun `remove key without child`() {
-            bstTwoNode = BSTree()
-            bstTwoNode.set(2, "B")
-            bstTwoNode.set(3, "C")
-            assertEquals("B", bstTwoNode.remove(2))
-            assertEquals(1, bstTwoNode.size)
-            assertEquals(Pair(3, "C"), bstTwoNode.getMin())
+        fun `remove single root`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            assertEquals("B", bst.remove(2))
+            assertEquals(0, bst.size)
         }
 
         @Test
-        fun `remove key with one child`() {
-            assertEquals("C", bst.remove(3))
-            assertEquals(Pair(2, "B"), bst.predecessor(4))
-            assertEquals(Pair(4, "D"), bst.successor(2))
+        fun `remove root with two children(list)`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(3, "C")
+            bst.set(1, "A")
+            bst.set(0, "Z")
+            bst.set(5, "E")
+            bst.set(4, "D")
+            assertEquals("B", bst.remove(2))
             assertEquals(5, bst.size)
+            assertEquals(listOf(0, 1, 3, 4, 5), bst.getKeys())
+        }
+
+        @Test
+        fun `remove root with two children`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(1, "A")
+            bst.set(0, "Z")
+            bst.set(6, "F")
+            bst.set(4, "D")
+            bst.set(5, "E")
+            assertEquals("B", bst.remove(2))
+            assertEquals(5, bst.size)
+            assertEquals(listOf(0, 1, 4, 5, 6), bst.getKeys())
+        }
+
+        @Test
+        fun `remove root with two children2`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(1, "A")
+            bst.set(0, "Z")
+            bst.set(6, "F")
+            bst.set(7, "G")
+            bst.set(4, "D")
+            bst.set(5, "E")
+            assertEquals("B", bst.remove(2))
+            assertEquals(6, bst.size)
+            assertEquals(listOf(0, 1, 4, 5, 6, 7), bst.getKeys())
+        }
+
+        @Test
+        fun `remove root with two children3`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(1, "A")
+            bst.set(0, "Z")
+            bst.set(8, "F")
+            bst.set(3, "D")
+            bst.set(5, "E")
+            bst.set(4, "F")
+            bst.set(6, "F")
+            assertEquals("B", bst.remove(2))
+            assertEquals(7, bst.size)
+            assertEquals(listOf(0, 1, 3, 4, 5, 6, 8), bst.getKeys())
+        }
+
+        @Test
+        fun `remove root without left child`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(3, "C")
+            bst.set(5, "E")
+            bst.set(4, "D")
+            assertEquals("B", bst.remove(2))
+            assertEquals(3, bst.size)
+            assertEquals(listOf(3, 4, 5), bst.getKeys())
+        }
+
+        @Test
+        fun `remove root without right child`() {
+            bst = BSTree()
+            bst.set(6, "F")
+            bst.set(3, "C")
+            bst.set(5, "E")
+            bst.set(4, "D")
+            assertEquals("F", bst.remove(6))
+            assertEquals(3, bst.size)
+            assertEquals(listOf(3, 4, 5), bst.getKeys())
+        }
+
+        @Test
+        fun `remove key without left child`() {
+            bst = BSTree()
+            bst.set(1, "A")
+            bst.set(2, "B")
+            bst.set(3, "C")
+            assertEquals("B", bst.remove(2))
+            assertEquals(2, bst.size)
+            assertEquals(listOf(Pair(1, "A"), Pair(3, "C")), bst.getEntities())
+        }
+
+        @Test
+        fun `remove key without right child`() {
+            bst = BSTree()
+            bst.set(3, "C")
+            bst.set(2, "B")
+            bst.set(1, "A")
+            assertEquals("B", bst.remove(2))
+            assertEquals(2, bst.size)
+            assertEquals(listOf(Pair(1, "A"), Pair(3, "C")), bst.getEntities())
+        }
+
+        @Test
+        fun `remove key with two children`() {
+            bst = BSTree()
+            bst.set(1, "A")
+            bst.set(3, "C")
+            bst.set(2, "B")
+            bst.set(4, "D")
+            assertEquals("C", bst.remove(3))
+            assertEquals(3, bst.size)
+            assertEquals(listOf(Pair(1, "A"), Pair(2, "B"), Pair(4, "D")), bst.getEntities())
         }
 
         @Test
         fun `remove key that is not in the tree`() {
+            bst = BSTree()
+            bst.set(2, "B")
+            bst.set(3, "C")
+            bst.set(0, "Z")
             assertEquals(null, bst.remove(1))
+            assertEquals(3, bst.size)
+            assertEquals(listOf(Pair(0, "Z"), Pair(2, "B"), Pair(3, "C")), bst.getEntities())
         }
 
         @Test
         fun `remove key from empty tree`() {
             assertEquals(null, bstEmpty.remove(1))
+            assertEquals(0, bstEmpty.size)
         }
     }
 
