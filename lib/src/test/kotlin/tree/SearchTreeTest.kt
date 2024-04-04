@@ -149,6 +149,72 @@ class SearchTreeTest {
         }
     }
 
+
+    @Nested
+    inner class `Traversal methods` {
+        @Test
+        fun `inOrderTraversal return empty list on empty tree`() {
+            val rbt = BSTree<Int, String>()
+            val result = mutableListOf<Int>()
+
+            rbt.inOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(), result)
+        }
+
+        @Test
+        fun `inOrderTraversal return keys in inOrder order`() {
+            val bst = BSTree<Int, String>()
+            bst.set(arrayOf(1 to "Homka", 2 to "Dima", 3 to "Nastya"))
+
+            val result = mutableListOf<Int>()
+            bst.inOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(1, 2, 3), bst.getKeys())
+        }
+
+        @Test
+        fun `preOrderTraversal return empty list on empty tree`() {
+            val rbt = RBTree<Int, String>()
+            val result = mutableListOf<Int>()
+
+            rbt.preOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(), result)
+        }
+
+        @Test
+        fun `preOrderTraversal return keys in preorder order`() {
+            val bst = BSTree<Int, String>()
+            bst.set(arrayOf(2 to "Homka", 1 to "Dima", 3 to "Nastya"))
+
+            val result = mutableListOf<Int>()
+            bst.preOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(2, 1, 3), result)
+        }
+
+        @Test
+        fun `postOrderTraversal return empty list on empty tree`() {
+            val rbt = RBTree<Int, String>()
+            val result = mutableListOf<Int>()
+
+            rbt.preOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(), result)
+        }
+
+        @Test
+        fun `postOrderTraversal return keys in preorder order`() {
+            val bst = BSTree<Int, String>()
+            bst.set(arrayOf(2 to "Homka", 1 to "Dima", 3 to "Nastya"))
+
+            val result = mutableListOf<Int>()
+            bst.postOrderTraversal { result.add(it.first) }
+
+            assertEquals(listOf<Int>(1, 3, 2), result)
+        }
+    }
 }
 
 
