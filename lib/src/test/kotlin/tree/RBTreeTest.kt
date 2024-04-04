@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
+import kotlin.random.Random
 
 class RBTreeTest {
     private lateinit var rbt: RBTree<Int, String>
@@ -79,12 +80,71 @@ class RBTreeTest {
     }
 
     @Nested
-    inner class `Insertion tests` {
+    inner class `Set tests` {
+
+
         @Test
         fun `set one key on empty tree`() {
+            val data = arrayOf(1 to "Homka")
             rbt.set(1, "Homka")
-            assertEquals(1, rbt.size)
-            assertEquals("Homka", rbt.search(1))
+            checkValue(1, "Homka")
+            checkSize(1)
+        }
+
+        @Test
+        fun `set second key as right child`() {
+            val data = arrayOf(1 to "Homka", 2 to "Dima")
+            rbt.set(data)
+            checkValue(1, "Homka")
+            checkValue(2, "Dima")
+            checkSize(2)
+            checkKeys(data)
+        }
+
+        @Test
+        fun `set second key as left child`() {
+            val data = arrayOf(2 to "Homka", 1 to "Dima")
+            rbt.set(data)
+            checkValue(2, "Homka")
+            checkValue(1, "Dima")
+            checkSize(2)
+            checkKeys(data)
+        }
+
+        @Test
+        fun `set third key as left child`() {
+            val data = arrayOf(1 to "Homka", 2 to "Dima")
+            rbt.set(data)
+            checkValue(2, "Homka")
+            checkValue(1, "Dima")
+            checkSize(2)
+            checkKeys(data)
+        }
+
+        @Test
+        fun `insert 1`() {
+            val rbt = RBTree<Int, Int?>()
+            val setWithNull: (Int) -> (Unit) = { key -> rbt.set(key, null) }
+
+            listOf(35, 21, 25, 62, 12, 62, 122, 621, 121, 362, 35, 523).forEach(setWithNull)
+        }
+
+        @Test
+        fun `stress test`() {
+            val rbt = RBTree<Int, Int?>()
+            val generator = Random(5)
+            val setWithNull: (Int) -> (Unit) = { key -> rbt.set(key, null) }
+
+            val randomKeys = mutableListOf<Int>()
+            for (i in 1..1000000) {
+                val randomValue = generator.nextInt()
+                randomKeys.add(randomValue)
+                setWithNull(randomValue)
+            }
+
+            val randomKeysDistinct = randomKeys.distinct()
+            assertEquals(randomKeysDistinct.sorted(), rbt.getKeys())
+            assertEquals(randomKeysDistinct.size.toLong(), rbt.size)
         }
     }
 }
