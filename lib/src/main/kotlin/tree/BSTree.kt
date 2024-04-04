@@ -63,23 +63,17 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
 
     override fun removeNode(node: BSTreeNode<K, V>) {
         val parentNode = root?.let { searchParentNode(node, it) }
-
         val nodeRight = node.right
         val nodeLeft = node.left
-
 
         if (nodeLeft == null && nodeRight == null) {
             return identifyChild(parentNode, node, null)
         }
 
         if (nodeLeft == null || nodeRight == null) {
+            val notNullNode = nodeLeft ?: nodeRight
 
-            if (nodeLeft == null) {
-                return identifyChild(parentNode, node, nodeRight)
-            } else {
-                return identifyChild(parentNode, node, nodeLeft)
-            }
-
+            return identifyChild(parentNode, node, notNullNode)
         }
 
         val successor = getMinSubtree(nodeRight)
