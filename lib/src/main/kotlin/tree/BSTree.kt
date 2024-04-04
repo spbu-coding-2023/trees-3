@@ -51,8 +51,10 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
         }
     }
 
-    private fun identifyChild(parentNode: BSTreeNode<K, V>, node: BSTreeNode<K, V>, value: BSTreeNode<K, V>?) {
-        if (parentNode.left == node) {
+    private fun identifyChild(parentNode: BSTreeNode<K, V>?, node: BSTreeNode<K, V>, value: BSTreeNode<K, V>?) {
+        if (parentNode == null) {
+            root = value
+        } else if (parentNode.left == node) {
             parentNode.left = value
         } else {
             parentNode.right = value
@@ -62,51 +64,31 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
     override fun removeNode(node: BSTreeNode<K, V>) {
         val parentNode = root?.let { searchParentNode(node, it) }
 
-        if (node.left == null && node.right == null) {
+        val nodeRight = node.right
+        val nodeLeft = node.left
 
-            if (parentNode == null) {
-                root = null
-                return
-            }
 
-            identifyChild(parentNode, node, null)
-
-        } else if (node.left == null || node.right == null) {
-
-            if (node.left == null) {
-
-                if (parentNode == null) {
-                    root = node.right
-                    return
-                }
-
-                identifyChild(parentNode, node, node.right)
-
-            } else {
-
-                if (parentNode == null) {
-                    root = node.left
-                    return
-                }
-
-                identifyChild(parentNode, node, node.left)
-            }
-
-        } else {
-            val nodeR = node.right
-            val successor = nodeR?.let { getMinSubtree(it) }
-            nodeR?.let { getMinSubtree(it) }?.let { removeNode(it) }
-
-            successor?.left = node.left
-            successor?.right = node.right
-
-            if (parentNode == null) {
-                root = successor
-                return
-            }
-
-            identifyChild(parentNode, node, successor)
+        if (nodeLeft == null && nodeRight == null) {
+            return identifyChild(parentNode, node, null)
         }
+
+        if (nodeLeft == null || nodeRight == null) {
+
+            if (nodeLeft == null) {
+                return identifyChild(parentNode, node, nodeRight)
+            } else {
+                return identifyChild(parentNode, node, nodeLeft)
+            }
+
+        }
+
+        val successor = getMinSubtree(nodeRight)
+        removeNode(successor)
+
+        successor.left = node.left
+        successor.right = node.right
+
+        identifyChild(parentNode, node, successor)
     }
 
     override fun createNode(key: K, value: V): BSTreeNode<K, V> {
