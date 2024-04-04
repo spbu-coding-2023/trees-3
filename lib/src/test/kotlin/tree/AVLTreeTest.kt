@@ -93,5 +93,37 @@ class AVLTreeTest {
     }
 
     @Nested
-    inner class `remove test`{}
+    inner class `remove test`{
+        @Test
+        fun `base test`() {
+            tree.set(1, 1)
+            tree.remove(1)
+            assertEquals(0, tree.size)
+        }
+
+        @Test
+        fun `many test`(){
+            val entities = arrayOf(
+                Pair(35, 1),
+                Pair(21, 1),
+                Pair(25, 1),
+                Pair(62, 1),
+                Pair(12, 1),
+                Pair(122, 1),
+                Pair(621, 1),
+                Pair(121, 1),
+                Pair(362, 1),
+                Pair(523, 1),
+            )
+
+            tree.set(entities)
+            tree.remove(arrayOf(
+                35, 12, 523
+            ))
+            assertEquals(7, tree.size)
+            assertEquals(listOf(
+                21, 25, 62, 121, 122, 362, 621
+            ), tree.getKeys())
+        }
+    }
 }
