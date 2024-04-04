@@ -81,44 +81,34 @@ class RBTreeTest {
 
     @Nested
     inner class `Set tests` {
-
+        fun setTest(data: Array<Pair<Int, String>>) {
+            rbt.set(data)
+            checkValues(data)
+            checkSize(data.size.toLong())
+        }
 
         @Test
         fun `set one key on empty tree`() {
             val data = arrayOf(1 to "Homka")
-            rbt.set(1, "Homka")
-            checkValue(1, "Homka")
-            checkSize(1)
+            setTest(data)
         }
 
         @Test
         fun `set second key as right child`() {
             val data = arrayOf(1 to "Homka", 2 to "Dima")
-            rbt.set(data)
-            checkValue(1, "Homka")
-            checkValue(2, "Dima")
-            checkSize(2)
-            checkKeys(data)
+            setTest(data)
         }
 
         @Test
         fun `set second key as left child`() {
             val data = arrayOf(2 to "Homka", 1 to "Dima")
-            rbt.set(data)
-            checkValue(2, "Homka")
-            checkValue(1, "Dima")
-            checkSize(2)
-            checkKeys(data)
+            setTest(data)
         }
 
         @Test
         fun `set third key as left child`() {
-            val data = arrayOf(1 to "Homka", 2 to "Dima")
-            rbt.set(data)
-            checkValue(2, "Homka")
-            checkValue(1, "Dima")
-            checkSize(2)
-            checkKeys(data)
+            val data = arrayOf(2 to "Homka", 3 to "Dima", 1 to "Nastya")
+            setTest(data)
         }
 
         @Test
