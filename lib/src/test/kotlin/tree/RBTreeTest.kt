@@ -200,4 +200,113 @@ class RBTreeTest {
             assertEquals(randomKeysDistinct.size.toLong(), rbt.size)
         }
     }
+
+    @Nested
+    inner class `Remove Tests` {
+        fun removeTest(data: Array<Pair<Int, String>>, key: Int) {
+            rbt.set(data)
+            rbt.remove(key)
+            checkValues(data.filter { it.first != key }.toTypedArray())
+            checkSize((data.size - 1).toLong())
+
+        }
+
+        @Test
+        fun `remove one key`() {
+            val data = arrayOf(1 to "Homka")
+            removeTest(data, 1)
+        }
+
+        @Test
+        fun `remove leaf key from right`() {
+            val data = arrayOf(2 to "Homka", 3 to "Dima", 1 to "Nastya")
+            removeTest(data, 3)
+        }
+
+        @Test
+        fun `remove single leaf key from right`() {
+            val data = arrayOf(2 to "Homka", 3 to "Dima")
+            removeTest(data, 3)
+        }
+
+        @Test
+        fun `remove leaf key from left`() {
+            val data = arrayOf(2 to "Homka", 3 to "Dima", 1 to "Nastya")
+            removeTest(data, 1)
+        }
+
+        @Test
+        fun `remove single leaf key from left`() {
+            val data = arrayOf(2 to "Homka", 1 to "Nastya")
+            removeTest(data, 1)
+        }
+
+        @Test
+        fun `remove root in tree with 3 nodes`() {
+            val data = arrayOf(2 to "Homka", 3 to "Dima", 1 to "Nastya")
+            removeTest(data, 2)
+        }
+
+        @Test
+        fun `remove root in tree with right node`() {
+            val data = arrayOf(2 to "Homka", 3 to "Dima")
+            removeTest(data, 2)
+        }
+
+        @Test
+        fun `remove root in tree with left node`() {
+            val data = arrayOf(2 to "Homka", 1 to "Dima")
+            removeTest(data, 2)
+        }
+
+        @Test
+        fun `remove node that is right subtree with nodes`() {
+            val data = arrayOf(
+                35 to "Homka", 21 to "Dima", 25 to "Nastya", 622 to "Rodion",
+                12 to "spisladqo", 62 to "Vichislav Zorich", 122 to "Sibiri4ok",
+                621 to "kotenok-barista", 121 to "vlad zavtra v zal", 362 to "karim",
+                36 to "seriy cardinal", 523 to "katya", 251 to "sonechka",
+                6422 to "dinozavrik", 4621 to "ruslan", 2093 to "islam",
+                235 to "miss mi", 682 to "liya", 2058 to "cold water", 2391 to "azamat",
+                2269 to "graphblas"
+            )
+            removeTest(data, 682)
+        }
+
+        @Test
+        fun `remove node that is left subtree with nodes`() {
+            val data = arrayOf(
+                35 to "Homka", 21 to "Dima", 25 to "Nastya", 622 to "Rodion",
+                12 to "spisladqo", 62 to "Vichislav Zorich", 122 to "Sibiri4ok",
+                621 to "kotenok-barista", 121 to "vlad zavtra v zal", 362 to "karim",
+                36 to "seriy cardinal", 523 to "katya", 251 to "sonechka",
+                6422 to "dinozavrik", 4621 to "ruslan", 2093 to "islam",
+                235 to "miss mi"
+            )
+            removeTest(data, 21)
+        }
+
+        @Test
+        fun `stress test`() {
+            val rbt = RBTree<Int, String>()
+            val generator = Random(5)
+            val setWithDefaultValue: (Int) -> (Unit) = { key -> rbt.set(key, "") }
+
+            val randomKeys = mutableListOf<Int>()
+            for (i in 1..1000000) {
+                val randomValue = generator.nextInt()
+                randomKeys.add(randomValue)
+                setWithDefaultValue(randomValue)
+            }
+
+            val len = randomKeys.size
+            for (index in 1..len) {
+                val value: Int = randomKeys.removeLast()
+                rbt.remove(value)
+            }
+
+            checkSize(0, rbt)
+            checkKeys(arrayOf(), rbt)
+        }
+    }
 }
