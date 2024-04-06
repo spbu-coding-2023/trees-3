@@ -219,7 +219,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      */
     fun predecessor(key: K): Pair<K?, V?> {
         var node = root
-        var predecessor: Node? = root?.left
+        var predecessor: Node? = null
 
         while (node != null) {
             if (node.key < key) {
