@@ -105,29 +105,22 @@ class SearchTreeTest {
     inner class `Getting test` {
         @Test
         fun `tree with node`() {
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(3, "C")
-            bst.set(4, "D")
-            bst.set(6, "F")
-            bst.set(7, "G")
-            bst.set(8, "H")
-
-            assertEquals(listOf(2, 3, 4, 6, 7, 8), bst.getKeys())
-            assertEquals(listOf("B", "C", "D", "F", "G", "H"), bst.getValues())
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10), bst.getKeys())
+            assertEquals(listOf("A", "A", "A", "A", "A", "A", "A", "A"), bst.getValues())
             assertEquals(
-                listOf(Pair(2, "B"), Pair(3, "C"), Pair(4, "D"), Pair(6, "F"), Pair(7, "G"), Pair(8, "H")),
+                listOf(
+                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
+                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "A")
+                ),
                 bst.getEntities()
             )
         }
 
         @Test
         fun `empty tree`() {
-            val bstEmpty = BSTree<Int, String>()
-
-            assertEquals(listOf<Int>(), bstEmpty.getKeys())
-            assertEquals(listOf<String>(), bstEmpty.getValues())
-            assertEquals(listOf<Pair<Int, String>>(), bstEmpty.getEntities())
+            assertEquals(listOf<Int>(), bstWithoutNodes.getKeys())
+            assertEquals(listOf<String>(), bstWithoutNodes.getValues())
+            assertEquals(listOf<Pair<Int, String>>(), bstWithoutNodes.getEntities())
         }
     }
 
