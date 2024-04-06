@@ -75,6 +75,7 @@ class SearchTreeTest {
             assertEquals(Pair(6, "A"), bst.successor(5))
             assertEquals(Pair(8, "A"), bst.successor(6))
             assertEquals(Pair(10, "A"), bst.successor(8))
+            assertEquals(Pair(null, null), bst.successor(10))
         }
 
         @Test
@@ -89,6 +90,7 @@ class SearchTreeTest {
 
         @Test
         fun `predecessor() test with existed keys`() {
+            assertEquals(Pair(null, null), bst.predecessor(1))
             assertEquals(Pair(1, "A"), bst.predecessor(2))
             assertEquals(Pair(2, "A"), bst.predecessor(3))
             assertEquals(Pair(3, "A"), bst.predecessor(4))
