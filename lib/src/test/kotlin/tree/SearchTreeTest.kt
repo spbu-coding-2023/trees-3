@@ -130,7 +130,7 @@ class SearchTreeTest {
     }
 
     @Nested
-    inner class `Search test` {
+    inner class `Search tests` {
         @Test
         fun `tree with node`() {
             assertEquals("A", bst.search(2))
@@ -142,6 +142,35 @@ class SearchTreeTest {
         }
     }
 
+    @Nested
+    inner class `Remove tests` {
+        @Test
+        fun `remove exist nodes`() {
+            assertEquals("A", bst.remove(2))
+            assertEquals(listOf(1, 3, 4, 5, 6, 8, 10), bst.getKeys())
+
+            assertEquals(listOf("A", "A", "A"), bst.remove(arrayOf(1, 5, 10)))
+            assertEquals(listOf(3, 4, 6, 8), bst.getKeys())
+        }
+
+        @Test
+        fun `remove don't exists nodes`() {
+            assertEquals(null, bst.remove(0))
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10), bst.getKeys())
+
+            assertEquals(listOf(null, null, null), bst.remove(arrayOf(11, 35, 100)))
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10), bst.getKeys())
+        }
+
+        @Test
+        fun `remove nodes from empty tree`() {
+            assertEquals(null, bstWithoutNodes.remove(2))
+            assertEquals(listOf<Int>(), bstWithoutNodes.getKeys())
+
+            assertEquals(listOf(null, null, null), bstWithoutNodes.remove(arrayOf(1, 3, 10)))
+            assertEquals(listOf<Int>(), bstWithoutNodes.getKeys())
+        }
+    }
 
     @Nested
     inner class `Traversal methods` {
