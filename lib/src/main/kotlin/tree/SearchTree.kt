@@ -269,7 +269,6 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
             inOrder(node.left)
             action(Pair(node.key, node.value))
             inOrder(node.right)
-
         }
 
         inOrder(this.root)
