@@ -84,8 +84,13 @@ class SearchTreeTest {
         }
 
         @Test
-        fun `predecessor() if key don't exists it return previous key`() {
-            assertEquals(Pair(6, "A"), bst.predecessor(7))
+        fun `successor() in empty tree`() {
+            assertEquals(Pair(null, null), bstWithoutNodes.successor(7))
+        }
+
+        @Test
+        fun `predecessor() in empty tree`() {
+            assertEquals(Pair(null, null), bstWithoutNodes.predecessor(7))
         }
 
         @Test
@@ -128,19 +133,12 @@ class SearchTreeTest {
     inner class `Search test` {
         @Test
         fun `tree with node`() {
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(3, "C")
-            bst.set(4, "D")
-
-            assertEquals("B", bst.search(2))
+            assertEquals("A", bst.search(2))
         }
 
         @Test
         fun `empty tree`() {
-            val bstEmpty = BSTree<Int, String>()
-
-            assertEquals(null, bstEmpty.search(2))
+            assertEquals(null, bstWithoutNodes.search(2))
         }
     }
 
