@@ -112,7 +112,7 @@ class BSTreeTest {
     inner class `Remove tests` {
 
         @Test
-        fun `remove single root`() {
+        fun `remove root without children`() {
             bst = BSTree()
             bst.set(2, "B")
             assertEquals("B", bst.remove(2))
@@ -120,7 +120,8 @@ class BSTreeTest {
         }
 
         @Test
-        fun `remove root with two children(list)`() {
+        fun `remove root with two children`() {
+            // successor root is root.right
             bst = BSTree()
             bst.set(2, "B")
             bst.set(3, "C")
@@ -134,7 +135,8 @@ class BSTreeTest {
         }
 
         @Test
-        fun `remove root with two children`() {
+        fun `remove root with two children1`() {
+            // successor root is list
             bst = BSTree()
             bst.set(2, "B")
             bst.set(1, "A")
@@ -149,6 +151,7 @@ class BSTreeTest {
 
         @Test
         fun `remove root with two children2`() {
+            // successor root has one child
             bst = BSTree()
             bst.set(2, "B")
             bst.set(1, "A")
@@ -164,6 +167,7 @@ class BSTreeTest {
 
         @Test
         fun `remove root with two children3`() {
+            // successor root has a subtree
             bst = BSTree()
             bst.set(2, "B")
             bst.set(1, "A")

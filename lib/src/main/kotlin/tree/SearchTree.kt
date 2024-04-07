@@ -219,7 +219,7 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      */
     fun predecessor(key: K): Pair<K?, V?> {
         var node = root
-        var predecessor: Node? = root?.left
+        var predecessor: Node? = null
 
         while (node != null) {
             if (node.key < key) {
@@ -264,11 +264,11 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
      */
     fun inOrderTraversal(action: (Pair<K, V>) -> (Unit)) {
         fun inOrder(node: Node?) {
-            if (node != null) {
-                inOrder(node.left)
-                action(Pair(node.key, node.value))
-                inOrder(node.right)
-            }
+            if (node == null) return
+
+            inOrder(node.left)
+            action(Pair(node.key, node.value))
+            inOrder(node.right)
         }
 
         inOrder(this.root)
