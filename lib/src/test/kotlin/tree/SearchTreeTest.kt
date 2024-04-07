@@ -47,7 +47,6 @@ class SearchTreeTest {
         }
     }
 
-
     @Nested
     inner class `Min and max tests` {
         @Test
@@ -261,7 +260,38 @@ class SearchTreeTest {
         }
     }
 
+    @Nested
+    inner class `Resently keys tests` {
+        @Test
+        fun `set in empty tree`() {
+            bstWithoutNodes.set(1, "B")
+            assertEquals(1, bstWithoutNodes.recentlyKey)
 
+            bstWithoutNodes.remove(1)
+
+            bstWithoutNodes.setIfEmpty(2, "B")
+            assertEquals(2, bstWithoutNodes.recentlyKey)
+        }
+
+        @Test
+        fun `set new node in tree`() {
+            bst.set(0, "B")
+            assertEquals(0, bst.recentlyKey)
+
+            bst.setIfEmpty(19, "B")
+            assertEquals(19, bst.recentlyKey)
+        }
+
+        @Test
+        fun `set the same node in tree`() {
+            bst.set(1, "B")
+            assertEquals(1, bst.recentlyKey)
+
+            bst.setIfEmpty(10, "B")
+            assertEquals(1, bst.recentlyKey)
+        }
+    }
+    
     @Nested
     inner class `Search tests` {
         @Test
