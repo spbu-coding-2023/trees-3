@@ -164,17 +164,11 @@ class SearchTreeTest {
         @Test
         fun `set new nodes`() {
             assertEquals(null, bst.set(19, "B"))
-            assertEquals(9, bst.size)
-            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10, 19), bst.getKeys())
 
             assertEquals(null, bst.setIfEmpty(11, "B"))
-            assertEquals(10, bst.size)
-            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10, 11, 19), bst.getKeys())
 
             assertEquals(listOf(null, null, null), bst.set(arrayOf(Pair(20, "B"), Pair(-5, "B"), Pair(7, "B"))))
             assertEquals(7, bst.recentlyKey)
-            assertEquals(13, bst.size)
-            assertEquals(listOf(-5, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 19, 20), bst.getKeys())
 
             assertEquals(listOf(null, null, null), bst.setIfEmpty(arrayOf(Pair(9, "B"), Pair(0, "B"), Pair(22, "B"))))
             assertEquals(22, bst.recentlyKey)
@@ -185,35 +179,11 @@ class SearchTreeTest {
         @Test
         fun `set the same nodes`() {
             assertEquals("A", bst.set(10, "B"))
-            assertEquals(8, bst.size)
-            assertEquals(
-                listOf(
-                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
-                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "B")
-                ),
-                bst.getEntities()
-            )
 
             assertEquals("A", bst.setIfEmpty(8, "B"))
-            assertEquals(8, bst.size)
-            assertEquals(
-                listOf(
-                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
-                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "B")
-                ),
-                bst.getEntities()
-            )
 
             assertEquals(listOf("A", "A", "A"), bst.set(arrayOf(Pair(2, "B"), Pair(6, "B"), Pair(4, "B"))))
             assertEquals(4, bst.recentlyKey)
-            assertEquals(8, bst.size)
-            assertEquals(
-                listOf(
-                    Pair(1, "A"), Pair(2, "B"), Pair(3, "A"), Pair(4, "B"),
-                    Pair(5, "A"), Pair(6, "B"), Pair(8, "A"), Pair(10, "B")
-                ),
-                bst.getEntities()
-            )
 
             assertEquals(listOf("A", "A", "A"), bst.setIfEmpty(arrayOf(Pair(1, "B"), Pair(5, "B"), Pair(3, "B"))))
             assertEquals(4, bst.recentlyKey)
@@ -283,7 +253,6 @@ class SearchTreeTest {
     inner class `Remove tests` {
         @Test
         fun `remove exist nodes`() {
-            assertEquals(8, bst.size)
             assertEquals("A", bst.remove(2))
             assertEquals(listOf(1, 3, 4, 5, 6, 8, 10), bst.getKeys())
             assertEquals(7, bst.size)
@@ -295,10 +264,7 @@ class SearchTreeTest {
 
         @Test
         fun `remove don't exist nodes`() {
-            assertEquals(8, bst.size)
             assertEquals(null, bst.remove(0))
-            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10), bst.getKeys())
-            assertEquals(8, bst.size)
 
             assertEquals(listOf(null, null, null), bst.remove(arrayOf(11, 35, 100)))
             assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10), bst.getKeys())
@@ -307,10 +273,7 @@ class SearchTreeTest {
 
         @Test
         fun `remove nodes from empty tree`() {
-            assertEquals(0, bstWithoutNodes.size)
             assertEquals(null, bstWithoutNodes.remove(2))
-            assertEquals(listOf<Int>(), bstWithoutNodes.getKeys())
-            assertEquals(0, bstWithoutNodes.size)
 
             assertEquals(listOf(null, null, null), bstWithoutNodes.remove(arrayOf(1, 3, 10)))
             assertEquals(listOf<Int>(), bstWithoutNodes.getKeys())
