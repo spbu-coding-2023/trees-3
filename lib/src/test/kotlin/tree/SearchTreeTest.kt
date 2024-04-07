@@ -181,7 +181,62 @@ class SearchTreeTest {
             assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
         }
     }
-    
+
+
+    @Nested
+    inner class `SetIfEmpty tests` {
+        @Test
+        fun `set new nodes`() {
+            assertEquals(null, bst.setIfEmpty(19, "B"))
+            assertEquals(9, bst.size)
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10, 19), bst.getKeys())
+
+            assertEquals(listOf(null, null, null), bst.setIfEmpty(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B"))))
+            assertEquals(12, bst.size)
+            assertEquals(listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 19), bst.getKeys())
+        }
+
+        @Test
+        fun `set the same nodes`() {
+            assertEquals("A", bst.setIfEmpty(10, "B"))
+            assertEquals(8, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
+                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "A")
+                ),
+                bst.getEntities()
+            )
+
+            assertEquals(listOf("A", "A", "A"), bst.setIfEmpty(arrayOf(Pair(2, "B"), Pair(6, "B"), Pair(4, "B"))))
+            assertEquals(8, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
+                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "A")
+                ),
+                bst.getEntities()
+            )
+        }
+
+        @Test
+        fun `set nodes in empty tree`() {
+            assertEquals(null, bstWithoutNodes.setIfEmpty(19, "B"))
+            assertEquals(1, bstWithoutNodes.size)
+            assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
+
+            bstWithoutNodes.remove(19)
+
+            assertEquals(
+                listOf(null, null, null),
+                bstWithoutNodes.setIfEmpty(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
+            )
+            assertEquals(3, bstWithoutNodes.size)
+            assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
+        }
+    }
+
+
     @Nested
     inner class `Search tests` {
         @Test
