@@ -130,10 +130,68 @@ class SearchTreeTest {
     }
 
     @Nested
+    inner class `Setting tests` {
+        @Test
+        fun `set new nodes`() {
+            assertEquals(null, bst.set(19, "B"))
+            assertEquals(9, bst.size)
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10, 19), bst.getKeys())
+
+            assertEquals(listOf(null, null, null), bst.set(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B"))))
+            assertEquals(12, bst.size)
+            assertEquals(listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 19), bst.getKeys())
+        }
+
+        @Test
+        fun `set the same nodes`() {
+            assertEquals("A", bst.set(10, "B"))
+            assertEquals(8, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
+                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "B")
+                ),
+                bst.getEntities()
+            )
+
+            assertEquals(listOf("A", "A", "A"), bst.set(arrayOf(Pair(2, "B"), Pair(6, "B"), Pair(4, "B"))))
+            assertEquals(8, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(1, "A"), Pair(2, "B"), Pair(3, "A"), Pair(4, "B"),
+                    Pair(5, "A"), Pair(6, "B"), Pair(8, "A"), Pair(10, "B")
+                ),
+                bst.getEntities()
+            )
+        }
+
+        @Test
+        fun `set nodes in empty tree`() {
+            assertEquals(null, bstWithoutNodes.set(19, "B"))
+            assertEquals(1, bstWithoutNodes.size)
+            assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
+
+            bstWithoutNodes.remove(19)
+
+            assertEquals(
+                listOf(null, null, null),
+                bstWithoutNodes.set(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
+            )
+            assertEquals(3, bstWithoutNodes.size)
+            assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
+        }
+    }
+    
+    @Nested
     inner class `Search tests` {
         @Test
-        fun `tree with node`() {
+        fun `search exist node`() {
             assertEquals("A", bst.search(2))
+        }
+
+        @Test
+        fun `search don't exist node`() {
+            assertEquals(null, bst.search(0))
         }
 
         @Test
@@ -146,29 +204,38 @@ class SearchTreeTest {
     inner class `Remove tests` {
         @Test
         fun `remove exist nodes`() {
+            assertEquals(8, bst.size)
             assertEquals("A", bst.remove(2))
             assertEquals(listOf(1, 3, 4, 5, 6, 8, 10), bst.getKeys())
+            assertEquals(7, bst.size)
 
             assertEquals(listOf("A", "A", "A"), bst.remove(arrayOf(1, 5, 10)))
             assertEquals(listOf(3, 4, 6, 8), bst.getKeys())
+            assertEquals(4, bst.size)
         }
 
         @Test
-        fun `remove don't exists nodes`() {
+        fun `remove don't exist nodes`() {
+            assertEquals(8, bst.size)
             assertEquals(null, bst.remove(0))
             assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10), bst.getKeys())
+            assertEquals(8, bst.size)
 
             assertEquals(listOf(null, null, null), bst.remove(arrayOf(11, 35, 100)))
             assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10), bst.getKeys())
+            assertEquals(8, bst.size)
         }
 
         @Test
         fun `remove nodes from empty tree`() {
+            assertEquals(0, bstWithoutNodes.size)
             assertEquals(null, bstWithoutNodes.remove(2))
             assertEquals(listOf<Int>(), bstWithoutNodes.getKeys())
+            assertEquals(0, bstWithoutNodes.size)
 
             assertEquals(listOf(null, null, null), bstWithoutNodes.remove(arrayOf(1, 3, 10)))
             assertEquals(listOf<Int>(), bstWithoutNodes.getKeys())
+            assertEquals(0, bstWithoutNodes.size)
         }
     }
 
