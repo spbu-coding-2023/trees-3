@@ -24,6 +24,31 @@ class SearchTreeTest {
     }
 
     @Nested
+    inner class `Constructor tests` {
+
+        @Test
+        fun `tree with one arg`() {
+            val bst = BSTree(1, "A")
+            assertEquals(listOf(Pair(1, "A")), bst.getEntities())
+        }
+
+        @Test
+        fun `tree with some args`() {
+            val bst: BSTree<Int, String> = BSTree(
+                arrayOf(
+                    Pair(1, "A"),
+                    Pair(2, "B"),
+                    Pair(3, "C"),
+                )
+            )
+
+            assertEquals(3, bst.size)
+            assertEquals(listOf(Pair(1, "A"), Pair(2, "B"), Pair(3, "C")), bst.getEntities())
+        }
+    }
+
+
+    @Nested
     inner class `Min and max tests` {
         @Test
         fun `getMin() return right pair`() {
