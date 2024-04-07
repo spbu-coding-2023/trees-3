@@ -155,15 +155,26 @@ class SearchTreeTest {
 
     @Nested
     inner class `Setting tests` {
+
         @Test
         fun `set new nodes`() {
             assertEquals(null, bst.set(19, "B"))
             assertEquals(9, bst.size)
             assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10, 19), bst.getKeys())
 
-            assertEquals(listOf(null, null, null), bst.set(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B"))))
-            assertEquals(12, bst.size)
-            assertEquals(listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 19), bst.getKeys())
+            assertEquals(null, bst.setIfEmpty(11, "B"))
+            assertEquals(10, bst.size)
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10, 11, 19), bst.getKeys())
+
+            assertEquals(listOf(null, null, null), bst.set(arrayOf(Pair(20, "B"), Pair(-5, "B"), Pair(7, "B"))))
+            assertEquals(7, bst.recentlyKey)
+            assertEquals(13, bst.size)
+            assertEquals(listOf(-5, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 19, 20), bst.getKeys())
+
+            assertEquals(listOf(null, null, null), bst.setIfEmpty(arrayOf(Pair(9, "B"), Pair(0, "B"), Pair(22, "B"))))
+            assertEquals(22, bst.recentlyKey)
+            assertEquals(16, bst.size)
+            assertEquals(listOf(-5, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 19, 20, 22), bst.getKeys())
         }
 
         @Test
@@ -178,7 +189,29 @@ class SearchTreeTest {
                 bst.getEntities()
             )
 
+            assertEquals("A", bst.setIfEmpty(8, "B"))
+            assertEquals(8, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
+                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "B")
+                ),
+                bst.getEntities()
+            )
+
             assertEquals(listOf("A", "A", "A"), bst.set(arrayOf(Pair(2, "B"), Pair(6, "B"), Pair(4, "B"))))
+            assertEquals(4, bst.recentlyKey)
+            assertEquals(8, bst.size)
+            assertEquals(
+                listOf(
+                    Pair(1, "A"), Pair(2, "B"), Pair(3, "A"), Pair(4, "B"),
+                    Pair(5, "A"), Pair(6, "B"), Pair(8, "A"), Pair(10, "B")
+                ),
+                bst.getEntities()
+            )
+
+            assertEquals(listOf("A", "A", "A"), bst.setIfEmpty(arrayOf(Pair(1, "B"), Pair(5, "B"), Pair(3, "B"))))
+            assertEquals(4, bst.recentlyKey)
             assertEquals(8, bst.size)
             assertEquals(
                 listOf(
@@ -195,103 +228,34 @@ class SearchTreeTest {
             assertEquals(1, bstWithoutNodes.size)
             assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
 
-            bstWithoutNodes.remove(19)
+            bstWithoutNodes.clear()
+
+            assertEquals(null, bstWithoutNodes.setIfEmpty(19, "B"))
+            assertEquals(1, bstWithoutNodes.size)
+            assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
+
+            bstWithoutNodes.clear()
 
             assertEquals(
                 listOf(null, null, null),
                 bstWithoutNodes.set(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
             )
+            assertEquals(7, bstWithoutNodes.recentlyKey)
             assertEquals(3, bstWithoutNodes.size)
             assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
-        }
-    }
 
-
-    @Nested
-    inner class `SetIfEmpty tests` {
-        @Test
-        fun `set new nodes`() {
-            assertEquals(null, bst.setIfEmpty(19, "B"))
-            assertEquals(9, bst.size)
-            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8, 10, 19), bst.getKeys())
-
-            assertEquals(listOf(null, null, null), bst.setIfEmpty(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B"))))
-            assertEquals(12, bst.size)
-            assertEquals(listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 19), bst.getKeys())
-        }
-
-        @Test
-        fun `set the same nodes`() {
-            assertEquals("A", bst.setIfEmpty(10, "B"))
-            assertEquals(8, bst.size)
-            assertEquals(
-                listOf(
-                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
-                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "A")
-                ),
-                bst.getEntities()
-            )
-
-            assertEquals(listOf("A", "A", "A"), bst.setIfEmpty(arrayOf(Pair(2, "B"), Pair(6, "B"), Pair(4, "B"))))
-            assertEquals(8, bst.size)
-            assertEquals(
-                listOf(
-                    Pair(1, "A"), Pair(2, "A"), Pair(3, "A"), Pair(4, "A"),
-                    Pair(5, "A"), Pair(6, "A"), Pair(8, "A"), Pair(10, "A")
-                ),
-                bst.getEntities()
-            )
-        }
-
-        @Test
-        fun `set nodes in empty tree`() {
-            assertEquals(null, bstWithoutNodes.setIfEmpty(19, "B"))
-            assertEquals(1, bstWithoutNodes.size)
-            assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
-
-            bstWithoutNodes.remove(19)
+            bstWithoutNodes.clear()
 
             assertEquals(
                 listOf(null, null, null),
                 bstWithoutNodes.setIfEmpty(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
             )
+            assertEquals(7, bstWithoutNodes.recentlyKey)
             assertEquals(3, bstWithoutNodes.size)
             assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
         }
     }
 
-    @Nested
-    inner class `Resently keys tests` {
-        @Test
-        fun `set in empty tree`() {
-            bstWithoutNodes.set(1, "B")
-            assertEquals(1, bstWithoutNodes.recentlyKey)
-
-            bstWithoutNodes.remove(1)
-
-            bstWithoutNodes.setIfEmpty(2, "B")
-            assertEquals(2, bstWithoutNodes.recentlyKey)
-        }
-
-        @Test
-        fun `set new node in tree`() {
-            bst.set(0, "B")
-            assertEquals(0, bst.recentlyKey)
-
-            bst.setIfEmpty(19, "B")
-            assertEquals(19, bst.recentlyKey)
-        }
-
-        @Test
-        fun `set the same node in tree`() {
-            bst.set(1, "B")
-            assertEquals(1, bst.recentlyKey)
-
-            bst.setIfEmpty(10, "B")
-            assertEquals(1, bst.recentlyKey)
-        }
-    }
-    
     @Nested
     inner class `Search tests` {
         @Test
