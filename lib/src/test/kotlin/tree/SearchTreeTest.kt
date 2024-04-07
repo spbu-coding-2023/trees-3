@@ -25,6 +25,11 @@ class SearchTreeTest {
 
     @Nested
     inner class `Constructor tests` {
+        @Test
+        fun `tree without args`() {
+            val bst = BSTree<Int, String>()
+            assertEquals(0, bst.size)
+        }
 
         @Test
         fun `tree with one arg`() {
