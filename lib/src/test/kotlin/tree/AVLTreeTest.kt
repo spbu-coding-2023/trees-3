@@ -1,7 +1,6 @@
 package tree
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.random.Random
@@ -97,12 +96,34 @@ class AVLTreeTest {
         @Test
         fun `base test`() {
             tree.set(1, 1)
-            tree.remove(1)
-            assertEquals(0, tree.size)
+            tree.set(2, 1)
+            tree.remove(2)
+            assertEquals(1, tree.size)
+            assertEquals(listOf(1), tree.getKeys())
         }
 
         @Test
-        fun `many test`(){
+        fun `remove root`(){
+            tree.set(1, 1)
+            tree.set(2, 1)
+            tree.set(3, 1)
+            tree.remove(2)
+            assertEquals(2, tree.size)
+            assertEquals(listOf(1, 3), tree.getKeys())
+        }
+
+        @Test
+        fun `remove last node`(){
+            tree.set(1, 1)
+            tree.set(2, 1)
+            tree.set(3, 1)
+            tree.remove(3)
+            assertEquals(2, tree.size)
+            assertEquals(listOf(1, 2), tree.getKeys())
+        }
+
+        @Test
+        fun `many node`() {
             val entities = arrayOf(
                 Pair(35, 1),
                 Pair(21, 1),
@@ -117,13 +138,17 @@ class AVLTreeTest {
             )
 
             tree.set(entities)
-            tree.remove(arrayOf(
-                35, 12, 523
-            ))
+            tree.remove(
+                arrayOf(
+                    35, 12, 523
+                )
+            )
             assertEquals(7, tree.size)
-            assertEquals(listOf(
-                21, 25, 62, 121, 122, 362, 621
-            ), tree.getKeys())
+            assertEquals(
+                listOf(
+                    21, 25, 62, 121, 122, 362, 621
+                ), tree.getKeys()
+            )
         }
     }
 }

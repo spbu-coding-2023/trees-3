@@ -96,46 +96,57 @@ class AVLTree<K : Comparable<K>, V> : SearchTree<K, V, AVLTreeNode<K, V>>() {
         root = insertRecursive(root, node)
     }
 
-    private fun minValueNode(node: AVLTreeNode<K, V>): AVLTreeNode<K, V> {
-        var current: AVLTreeNode<K, V> = node
-        var leftNode = current.left
+    private fun minValueNode(node: AVLTreeNode<K, V>?): AVLTreeNode<K, V>? {
+        var current = node
 
-        while (leftNode != null) {
-            current = leftNode
-            leftNode = current.left
-        }
+        while (current?.left != null) current = current.left
 
         return current
+    }
+    private fun changeNode(oldNode: AVLTreeNode<K, V>, newNode: AVLTreeNode<K, V>?): AVLTreeNode<K, V>? {
+        if (newNode == null) {
+            return null
+        }
+
+        val node = createNode(newNode.key, newNode.value)
+
+        node.right = oldNode.right
+        node.left = oldNode.left
+        node.height = oldNode.height
+
+        return node
     }
 
     private fun removeRecursive(root: AVLTreeNode<K, V>?, node: AVLTreeNode<K, V>): AVLTreeNode<K, V>? {
         var rootNode = root
 
-        if (rootNode == null) {
-            return root
-        }
+        if (rootNode == null) return rootNode
 
         if (rootNode.key > node.key) {
             rootNode.left = removeRecursive(rootNode.left, node)
-            return rebalanced(rootNode, node)
         } else if (rootNode.key < node.key) {
             rootNode.right = removeRecursive(rootNode.right, node)
-            return rebalanced(rootNode, node)
+        }
+        else{
+            if (rootNode.left == null || rootNode.right == null) {
+                var newNode: AVLTreeNode<K, V>? = null
+                newNode = rootNode.left ?: rootNode.right
+                if (newNode == null) {
+                    rootNode = null
+                } else {
+                    rootNode = newNode
+                }
+            } else {
+                val newNode = minValueNode(rootNode.right)
+                rootNode = changeNode(rootNode, newNode)
+
+                if (rootNode != null) {
+                    rootNode.right = newNode?.let { removeRecursive(rootNode.right, it) }
+                }
+            }
         }
 
-        val rootNodeRight = rootNode.right
-        val rootNodeLeft = rootNode.left
-        if (rootNodeLeft == null || rootNodeRight == null) {
-            rootNode = rootNodeLeft ?: rootNodeRight
-        } else {
-            val mostLeftChild: AVLTreeNode<K, V> = minValueNode(rootNodeRight)
-            rootNode = mostLeftChild
-            rootNode.right = removeRecursive(rootNode.right, rootNode)
-        }
-
-        if (rootNode == null) {
-            return root
-        }
+        if (rootNode == null) return rootNode
 
         return rebalanced(rootNode, node)
     }
