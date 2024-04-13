@@ -21,12 +21,10 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
             }
         }
 
-        if (parentNode == null) {
-            root = node
-        } else if (node.key < parentNode.key) {
-            parentNode.left = node
-        } else {
-            parentNode.right = node
+        when {
+            parentNode == null -> root = node
+            node.key < parentNode.key -> parentNode.left = node
+            else -> parentNode.right = node
         }
     }
 
@@ -52,12 +50,10 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
     }
 
     private fun identifyChild(parentNode: BSTreeNode<K, V>?, node: BSTreeNode<K, V>, value: BSTreeNode<K, V>?) {
-        if (parentNode == null) {
-            root = value
-        } else if (parentNode.left == node) {
-            parentNode.left = value
-        } else {
-            parentNode.right = value
+        when {
+            parentNode == null -> root = value
+            parentNode.left == node -> parentNode.left = value
+            else -> parentNode.right = value
         }
     }
 
@@ -85,7 +81,5 @@ class BSTree<K : Comparable<K>, V> : SearchTree<K, V, BSTreeNode<K, V>> {
         identifyChild(parentNode, node, successor)
     }
 
-    override fun createNode(key: K, value: V): BSTreeNode<K, V> {
-        return BSTreeNode(key, value)
-    }
+    override fun createNode(key: K, value: V): BSTreeNode<K, V> = BSTreeNode(key, value)
 }

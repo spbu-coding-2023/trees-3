@@ -12,15 +12,12 @@ class SearchTreeTest {
 
     @BeforeEach
     fun setup() {
-        bst = BSTree()
-        bst.set(5, "A")
-        bst.set(8, "A")
-        bst.set(6, "A")
-        bst.set(1, "A")
-        bst.set(2, "A")
-        bst.set(4, "A")
-        bst.set(3, "A")
-        bst.set(10, "A")
+        bst = BSTree(
+            arrayOf(
+                Pair(5, "A"), Pair(8, "A"), Pair(6, "A"), Pair(1, "A"),
+                Pair(2, "A"), Pair(4, "A"), Pair(3, "A"), Pair(10, "A")
+            )
+        )
     }
 
     @Nested
@@ -197,37 +194,44 @@ class SearchTreeTest {
             )
         }
 
-        @Test
-        fun `set nodes in empty tree`() {
-            assertEquals(null, bstWithoutNodes.set(19, "B"))
-            assertEquals(1, bstWithoutNodes.size)
-            assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
+        @Nested
+        inner class `set nodes in empty tree` {
+            @Test
+            fun `set new node`() {
+                assertEquals(null, bstWithoutNodes.set(19, "B"))
+                assertEquals(1, bstWithoutNodes.size)
+                assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
+            }
 
-            bstWithoutNodes.clear()
+            @Test
+            fun `setIfEmpty new node`() {
+                assertEquals(null, bstWithoutNodes.setIfEmpty(19, "B"))
+                assertEquals(1, bstWithoutNodes.size)
+                assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
+            }
 
-            assertEquals(null, bstWithoutNodes.setIfEmpty(19, "B"))
-            assertEquals(1, bstWithoutNodes.size)
-            assertEquals(listOf(Pair(19, "B")), bstWithoutNodes.getEntities())
+            @Test
+            fun `set new nodes`() {
+                assertEquals(
+                    listOf(null, null, null),
+                    bstWithoutNodes.set(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
+                )
+                assertEquals(7, bstWithoutNodes.recentlyKey)
+                assertEquals(3, bstWithoutNodes.size)
+                assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
 
-            bstWithoutNodes.clear()
+            }
 
-            assertEquals(
-                listOf(null, null, null),
-                bstWithoutNodes.set(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
-            )
-            assertEquals(7, bstWithoutNodes.recentlyKey)
-            assertEquals(3, bstWithoutNodes.size)
-            assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
-
-            bstWithoutNodes.clear()
-
-            assertEquals(
-                listOf(null, null, null),
-                bstWithoutNodes.setIfEmpty(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
-            )
-            assertEquals(7, bstWithoutNodes.recentlyKey)
-            assertEquals(3, bstWithoutNodes.size)
-            assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
+            @Test
+            fun `setIfEmpty new nodes`() {
+                assertEquals(
+                    listOf(null, null, null),
+                    bstWithoutNodes.setIfEmpty(arrayOf(Pair(12, "B"), Pair(0, "B"), Pair(7, "B")))
+                )
+                assertEquals(7, bstWithoutNodes.recentlyKey)
+                assertEquals(3, bstWithoutNodes.size)
+                assertEquals(listOf(Pair(0, "B"), Pair(7, "B"), Pair(12, "B")), bstWithoutNodes.getEntities())
+            }
         }
     }
 

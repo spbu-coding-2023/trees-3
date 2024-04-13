@@ -25,13 +25,7 @@ class BSTreeTest {
 
         @Test
         fun `tree with some args`() {
-            val bst: BSTree<Int, String> = BSTree(
-                arrayOf(
-                    Pair(1, "A"),
-                    Pair(2, "B"),
-                    Pair(3, "C"),
-                )
-            )
+            val bst: BSTree<Int, String> = BSTree(arrayOf(Pair(1, "A"), Pair(2, "B"), Pair(3, "C")))
 
             assertEquals(3, bst.size)
             assertEquals(listOf(Pair(1, "A"), Pair(2, "B"), Pair(3, "C")), bst.getEntities())
@@ -43,13 +37,12 @@ class BSTreeTest {
     inner class `Insert tests` {
         @BeforeEach
         fun setup() {
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(3, "C")
-            bst.set(4, "D")
-            bst.set(6, "F")
-            bst.set(7, "G")
-            bst.set(8, "H")
+            bst = BSTree(
+                arrayOf(
+                    Pair(2, "B"), Pair(3, "C"), Pair(4, "D"),
+                    Pair(6, "F"), Pair(7, "G"), Pair(8, "H")
+                )
+            )
         }
 
         @Test
@@ -70,8 +63,8 @@ class BSTreeTest {
             assertEquals(7, bst.size)
             assertEquals(
                 listOf(
-                    Pair(2, "B"), Pair(3, "C"), Pair(4, "D"),
-                    Pair(6, "F"), Pair(7, "G"), Pair(8, "H"), Pair(9, "I")
+                    Pair(2, "B"), Pair(3, "C"), Pair(4, "D"), Pair(6, "F"),
+                    Pair(7, "G"), Pair(8, "H"), Pair(9, "I")
                 ), bst.getEntities()
             )
         }
@@ -113,8 +106,8 @@ class BSTreeTest {
 
         @Test
         fun `remove root without children`() {
-            bst = BSTree()
-            bst.set(2, "B")
+            bst = BSTree(2, "B")
+
             assertEquals("B", bst.remove(2))
             assertEquals(0, bst.size)
         }
@@ -122,13 +115,13 @@ class BSTreeTest {
         @Test
         fun `remove root with two children`() {
             // successor root is root.right
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(3, "C")
-            bst.set(1, "A")
-            bst.set(0, "Z")
-            bst.set(5, "E")
-            bst.set(4, "D")
+            bst = BSTree(
+                arrayOf(
+                    Pair(2, "B"), Pair(3, "C"), Pair(1, "A"),
+                    Pair(0, "Z"), Pair(5, "E"), Pair(4, "D")
+                )
+            )
+
             assertEquals("B", bst.remove(2))
             assertEquals(5, bst.size)
             assertEquals(listOf(0, 1, 3, 4, 5), bst.getKeys())
@@ -137,13 +130,13 @@ class BSTreeTest {
         @Test
         fun `remove root with two children1`() {
             // successor root is list
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(1, "A")
-            bst.set(0, "Z")
-            bst.set(6, "F")
-            bst.set(4, "D")
-            bst.set(5, "E")
+            bst = BSTree(
+                arrayOf(
+                    Pair(2, "B"), Pair(1, "A"), Pair(0, "Z"),
+                    Pair(6, "F"), Pair(4, "D"), Pair(5, "E")
+                )
+            )
+
             assertEquals("B", bst.remove(2))
             assertEquals(5, bst.size)
             assertEquals(listOf(0, 1, 4, 5, 6), bst.getKeys())
@@ -152,14 +145,13 @@ class BSTreeTest {
         @Test
         fun `remove root with two children2`() {
             // successor root has one child
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(1, "A")
-            bst.set(0, "Z")
-            bst.set(6, "F")
-            bst.set(7, "G")
-            bst.set(4, "D")
-            bst.set(5, "E")
+            bst = BSTree(
+                arrayOf(
+                    Pair(2, "B"), Pair(1, "A"), Pair(0, "Z"), Pair(6, "F"),
+                    Pair(7, "G"), Pair(4, "D"), Pair(5, "E")
+                )
+            )
+
             assertEquals("B", bst.remove(2))
             assertEquals(6, bst.size)
             assertEquals(listOf(0, 1, 4, 5, 6, 7), bst.getKeys())
@@ -168,15 +160,13 @@ class BSTreeTest {
         @Test
         fun `remove root with two children3`() {
             // successor root has a subtree
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(1, "A")
-            bst.set(0, "Z")
-            bst.set(8, "K")
-            bst.set(3, "C")
-            bst.set(5, "E")
-            bst.set(4, "D")
-            bst.set(6, "F")
+            bst = BSTree(
+                arrayOf(
+                    Pair(2, "B"), Pair(1, "A"), Pair(0, "Z"), Pair(8, "K"),
+                    Pair(3, "C"), Pair(5, "E"), Pair(4, "D"), Pair(6, "F")
+                )
+            )
+
             assertEquals("B", bst.remove(2))
             assertEquals(7, bst.size)
             assertEquals(listOf(0, 1, 3, 4, 5, 6, 8), bst.getKeys())
@@ -184,11 +174,8 @@ class BSTreeTest {
 
         @Test
         fun `remove root without left child`() {
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(3, "C")
-            bst.set(5, "E")
-            bst.set(4, "D")
+            bst = BSTree(arrayOf(Pair(2, "B"), Pair(3, "C"), Pair(5, "E"), Pair(4, "D")))
+
             assertEquals("B", bst.remove(2))
             assertEquals(3, bst.size)
             assertEquals(listOf(3, 4, 5), bst.getKeys())
@@ -196,11 +183,8 @@ class BSTreeTest {
 
         @Test
         fun `remove root without right child`() {
-            bst = BSTree()
-            bst.set(6, "F")
-            bst.set(3, "C")
-            bst.set(5, "E")
-            bst.set(4, "D")
+            bst = BSTree(arrayOf(Pair(6, "F"), Pair(3, "C"), Pair(5, "E"), Pair(4, "D")))
+
             assertEquals("F", bst.remove(6))
             assertEquals(3, bst.size)
             assertEquals(listOf(3, 4, 5), bst.getKeys())
@@ -208,10 +192,8 @@ class BSTreeTest {
 
         @Test
         fun `remove key without left child`() {
-            bst = BSTree()
-            bst.set(1, "A")
-            bst.set(2, "B")
-            bst.set(3, "C")
+            bst = BSTree(arrayOf(Pair(1, "A"), Pair(2, "B"), Pair(3, "C")))
+
             assertEquals("B", bst.remove(2))
             assertEquals(2, bst.size)
             assertEquals(listOf(Pair(1, "A"), Pair(3, "C")), bst.getEntities())
@@ -219,10 +201,8 @@ class BSTreeTest {
 
         @Test
         fun `remove key without right child`() {
-            bst = BSTree()
-            bst.set(3, "C")
-            bst.set(2, "B")
-            bst.set(1, "A")
+            bst = BSTree(arrayOf(Pair(3, "C"), Pair(2, "B"), Pair(1, "A")))
+
             assertEquals("B", bst.remove(2))
             assertEquals(2, bst.size)
             assertEquals(listOf(Pair(1, "A"), Pair(3, "C")), bst.getEntities())
@@ -230,11 +210,8 @@ class BSTreeTest {
 
         @Test
         fun `remove key with two children`() {
-            bst = BSTree()
-            bst.set(1, "A")
-            bst.set(3, "C")
-            bst.set(2, "B")
-            bst.set(4, "D")
+            bst = BSTree(arrayOf(Pair(1, "A"), Pair(3, "C"), Pair(2, "B"), Pair(4, "D")))
+
             assertEquals("C", bst.remove(3))
             assertEquals(3, bst.size)
             assertEquals(listOf(Pair(1, "A"), Pair(2, "B"), Pair(4, "D")), bst.getEntities())
@@ -242,10 +219,8 @@ class BSTreeTest {
 
         @Test
         fun `remove key that is not in the tree`() {
-            bst = BSTree()
-            bst.set(2, "B")
-            bst.set(3, "C")
-            bst.set(0, "Z")
+            bst = BSTree(arrayOf(Pair(2, "B"), Pair(3, "C"), Pair(0, "Z")))
+
             assertEquals(null, bst.remove(1))
             assertEquals(3, bst.size)
             assertEquals(listOf(Pair(0, "Z"), Pair(2, "B"), Pair(3, "C")), bst.getEntities())
