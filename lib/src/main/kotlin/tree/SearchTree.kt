@@ -28,12 +28,10 @@ abstract class SearchTree<K : Comparable<K>, V, Node : BinaryTreeNode<K, V, Node
         var node = root
 
         while (node != null) {
-            if (key < node.key) {
-                node = node.left
-            } else if (key > node.key) {
-                node = node.right
-            } else {
-                return node
+            when {
+                key < node.key -> node = node.left
+                key > node.key -> node = node.right
+                else -> return node
             }
         }
 
