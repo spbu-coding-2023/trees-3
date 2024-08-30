@@ -1,5 +1,6 @@
 package tree
 
+import tree.node.BSTreeNode
 import tree.node.TreapNode
 import kotlin.random.Random
 
@@ -49,6 +50,18 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
             node.left = splitRezult.second
 
             return Pair(splitRezult.first, node)
+        }
+    }
+
+    private fun searchParentNode(node: TreapNode<K, V>, parentNode: TreapNode<K, V>): TreapNode<K, V>? {
+        if (parentNode.left == node || parentNode.right == node) {
+            return parentNode
+        }
+
+        if (node.key < parentNode.key) {
+            return parentNode.left?.let { searchParentNode(node, it) }
+        } else {
+            return parentNode.right?.let { searchParentNode(node, it) }
         }
     }
 
