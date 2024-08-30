@@ -65,6 +65,14 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
         }
     }
 
+    private fun identifyChild(parentNode: TreapNode<K, V>?, node: TreapNode<K, V>, value: TreapNode<K, V>?) {
+        when {
+            parentNode == null -> root = value
+            parentNode.left == node -> parentNode.left = value
+            else -> parentNode.right = value
+        }
+    }
+
     override fun insertNode(node: TreapNode<K, V>) {
         generatePrior(node)
 
