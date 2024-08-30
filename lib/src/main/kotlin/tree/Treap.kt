@@ -87,7 +87,5 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
         identifyChild(parentNode, node, merge(node.right, node.right))
     }
 
-    override fun createNode(key: K, value: V): TreapNode<K, V> {
-        return TreapNode(key, value)
-    }
+    override fun createNode(key: K, value: V): TreapNode<K, V> = TreapNode(key, value)
 }
