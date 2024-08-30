@@ -36,6 +36,22 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
         }
     }
 
+    private fun split(node: TreapNode<K, V>?, key: K) : Pair<TreapNode<K, V>?, TreapNode<K, V>?> {
+        if (node == null) return Pair(null,null)
+
+        else if (key > node.key) {
+            val splitRezult: Pair<TreapNode<K, V>?, TreapNode<K, V>?> = split(node.right, key)
+            node.right = splitRezult.first
+
+            return Pair(node, splitRezult.second)
+        } else {
+            val splitRezult: Pair<TreapNode<K, V>?, TreapNode<K, V>?> = split(node.left, key)
+            node.left = splitRezult.second
+
+            return Pair(splitRezult.first, node)
+        }
+    }
+
     override fun insertNode(node: TreapNode<K, V>) {}
 
     override fun removeNode(node: TreapNode<K, V>) {}
