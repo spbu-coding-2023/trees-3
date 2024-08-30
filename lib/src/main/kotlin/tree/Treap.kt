@@ -52,7 +52,10 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
         }
     }
 
-    override fun insertNode(node: TreapNode<K, V>) {}
+    override fun insertNode(node: TreapNode<K, V>) {
+        val splitRezult: Pair<TreapNode<K, V>?, TreapNode<K, V>?> = split(root, node.key)
+        merge(merge(splitRezult.first, node), splitRezult.second)
+    }
 
     override fun removeNode(node: TreapNode<K, V>) {}
 
