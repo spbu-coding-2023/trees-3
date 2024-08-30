@@ -24,9 +24,15 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
     }
 
     private fun merge(nodeL: TreapNode<K, V>?, nodeR: TreapNode<K, V>?) : TreapNode<K, V>? {
-        if (nodeL == null && nodeR == null ) return null
-        if (nodeL == null) return nodeR
-        if (nodeR == null) return nodeL
+        if (nodeL == null && nodeR == null ) root = null
+        if (nodeL == null) {
+            root = nodeR
+            return nodeR
+        }
+        if (nodeR == null) {
+            root = nodeL
+            return nodeL
+        }
 
         if (nodeL.prior > nodeR.prior){
             nodeL.right = merge(nodeL.right, nodeR)
