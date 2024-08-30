@@ -80,7 +80,12 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
         merge(merge(splitTrees.first, node), splitTrees.second)
     }
 
-    override fun removeNode(node: TreapNode<K, V>) {}
+    override fun removeNode(node: TreapNode<K, V>) {
+        allPriors.remove(node.prior)
+
+        val parentNode = root?.let { searchParentNode(node, it) }
+        identifyChild(parentNode, node, merge(node.right, node.right))
+    }
 
     override fun createNode(key: K, value: V): TreapNode<K, V> {
         return TreapNode(key, value)
