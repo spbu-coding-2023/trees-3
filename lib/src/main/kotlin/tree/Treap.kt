@@ -1,30 +1,38 @@
 package tree
 
-import tree.node.BSTreeNode
 import tree.node.TreapNode
 import kotlin.random.Random
 
 class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
+
     constructor() : super()
     constructor(key: K, value: V) : super(key, value)
     constructor(pairs: Array<Pair<K, V>>) : super(pairs)
 
     private var allPriors = mutableListOf(0)
 
-    private fun generatePrior(node: TreapNode<K, V>){
+    private fun generatePrior(node: TreapNode<K, V>) {
+        when {
+            node.prior == 0 -> node.prior = Random.nextInt()
+            allPriors.contains(node.prior) == true -> generatePrior(node)
+            else -> allPriors.add(node.prior)
+        }
 
-        if (node.prior == 0){
-            node.prior = Random.nextInt()
-        }
-        if (allPriors.contains(node.prior)){
-            generatePrior(node)
-        } else {
-            allPriors.add(node.prior)
-        }
+//        if (node.prior == 0){
+//            node.prior = Random.nextInt()
+//        }
+//        if (allPriors.contains(node.prior)){
+//            generatePrior(node)
+//        } else {
+//            allPriors.add(node.prior)
+//        }
     }
 
     private fun merge(nodeL: TreapNode<K, V>?, nodeR: TreapNode<K, V>?) : TreapNode<K, V>? {
-        if (nodeL == null && nodeR == null ) root = null
+        if (nodeL == null && nodeR == null) {
+            root = null
+            return null
+        }
         if (nodeL == null) {
             root = nodeR
             return nodeR
@@ -47,12 +55,13 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
         if (node == null) return Pair(null,null)
 
         else if (key > node.key) {
-            val splitRezult: Pair<TreapNode<K, V>?, TreapNode<K, V>?> = split(node.right, key)
+            val splitRezult = split(node.right, key)
             node.right = splitRezult.first
 
             return Pair(node, splitRezult.second)
+
         } else {
-            val splitRezult: Pair<TreapNode<K, V>?, TreapNode<K, V>?> = split(node.left, key)
+            val splitRezult = split(node.left, key)
             node.left = splitRezult.second
 
             return Pair(splitRezult.first, node)
