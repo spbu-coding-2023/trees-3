@@ -194,4 +194,13 @@ class TreapTest{
             assertEquals(0, treapEmpty.size)
         }
     }
+
+    @Nested
+    inner class `Create tests` {
+        @Test
+        fun `insert new node`() {
+            treap = Treap(1, "A")
+            assertEquals(listOf(Pair(1, "A")), treap.getEntities())
+        }
+    }
 }
