@@ -17,29 +17,20 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
             allPriors.contains(node.prior) == true -> generatePrior(node)
             else -> allPriors.add(node.prior)
         }
-
-//        if (node.prior == 0){
-//            node.prior = Random.nextInt()
-//        }
-//        if (allPriors.contains(node.prior)){
-//            generatePrior(node)
-//        } else {
-//            allPriors.add(node.prior)
-//        }
     }
 
     private fun merge(nodeL: TreapNode<K, V>?, nodeR: TreapNode<K, V>?) : TreapNode<K, V>? {
         if (nodeL == null && nodeR == null) {
             root = null
-            return null
+            return root
         }
         if (nodeL == null) {
             root = nodeR
-            return nodeR
+            return root
         }
         if (nodeR == null) {
             root = nodeL
-            return nodeL
+            return root
         }
 
         if (nodeL.prior > nodeR.prior){
