@@ -21,15 +21,15 @@ class TreapTest{
         fun `tree with one arg`() {
             val treap = Treap(1, "A")
             assertEquals("A", treap.search(1))
-            assertEquals(listOf(Pair(1, "A")), treap.getEntities())
+            assertEquals(listOf(1 to "A"), treap.getEntities())
         }
 
         @Test
         fun `tree with some args`() {
-            val treap: Treap<Int, String> = Treap(arrayOf(Pair(1, "A"), Pair(2, "B"), Pair(3, "C")))
+            val treap: Treap<Int, String> = Treap(arrayOf(1 to "A", 2 to "B", 3 to "C"))
 
             assertEquals(3, treap.size)
-            assertEquals(listOf(Pair(1, "A"), Pair(2, "B"), Pair(3, "C")), treap.getEntities())
+            assertEquals(listOf(1 to "A", 2 to "B", 3 to "C"), treap.getEntities())
         }
     }
 
@@ -38,12 +38,7 @@ class TreapTest{
 
         @BeforeEach
         fun setup() {
-            treap = Treap(
-                arrayOf(
-                    Pair(1, "A"), Pair(2, "B"), Pair(3, "C"),
-                    Pair(4, "D"), Pair(5, "E"), Pair(8, "H")
-                )
-            )
+            treap = Treap(arrayOf(1 to "A", 2 to "B", 3 to "C", 4 to "D", 5 to "E", 8 to "H"))
         }
 
         @Test
@@ -83,7 +78,7 @@ class TreapTest{
         fun `set key in empty tree`() {
             treapEmpty.set(1, "A")
 
-            assertEquals(listOf(Pair(1, "A")), treapEmpty.getEntities())
+            assertEquals(listOf(1 to "A"), treapEmpty.getEntities())
             assertEquals(1, treapEmpty.size)
         }
     }
@@ -93,21 +88,16 @@ class TreapTest{
 
         @Test
         fun `remove root without children`() {
-            treap = Treap(2, "B")
+            treap = Treap(arrayOf(2 to "B"))
 
             assertEquals("B", treap.remove(2))
             assertEquals(0, treap.size)
         }
 
         @Test
-        fun `remove the smallest key`() {
+        fun `remove min key`() {
 
-            treap = Treap(
-                arrayOf(
-                    Pair(1, "A"), Pair(2, "B"), Pair(3, "C"),
-                    Pair(4, "D"), Pair(5, "E"), Pair(6, "F")
-                )
-            )
+            treap = Treap(arrayOf(1 to "A", 2 to "B", 3 to "C", 4 to "D", 5 to "E", 6 to "F"))
 
             assertEquals("A", treap.remove(1))
             assertEquals(5, treap.size)
@@ -115,14 +105,9 @@ class TreapTest{
         }
 
         @Test
-        fun `remove the biggest key`() {
+        fun `remove max key`() {
 
-            treap = Treap(
-                arrayOf(
-                    Pair(1, "A"), Pair(2, "B"), Pair(3, "C"),
-                    Pair(4, "D"), Pair(5, "E"), Pair(6, "F")
-                )
-            )
+            treap = Treap(arrayOf(1 to "A", 2 to "B", 3 to "C", 4 to "D", 5 to "E", 6 to "F"))
 
             assertEquals("F", treap.remove(6))
             assertEquals(5, treap.size)
@@ -132,12 +117,7 @@ class TreapTest{
         @Test
         fun `remove key that is not in the tree`() {
 
-            treap = Treap(
-                arrayOf(
-                    Pair(1, "A"), Pair(2, "B"), Pair(3, "C"),
-                    Pair(4, "D"), Pair(5, "E"), Pair(6, "F")
-                )
-            )
+            treap = Treap(arrayOf(1 to "A", 2 to "B", 3 to "C", 4 to "D", 5 to "E", 6 to "F"))
 
             assertEquals(null, treap.remove(0))
             assertEquals(6, treap.size)
@@ -155,8 +135,8 @@ class TreapTest{
     inner class `Create tests` {
         @Test
         fun `insert new node`() {
-            treap = Treap(1, "A")
-            assertEquals(listOf(Pair(1, "A")), treap.getEntities())
+            treap = Treap(arrayOf(1 to "A"))
+            assertEquals(listOf(1 to "A"), treap.getEntities())
         }
     }
 }
