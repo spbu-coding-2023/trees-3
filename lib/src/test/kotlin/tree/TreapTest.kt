@@ -68,10 +68,13 @@ class TreapTest{
 
         @Test
         fun `set the same key`() {
-            treap.set(5, "E")
+            treap.set(5, "e")
 
-            assertEquals(7, treap.size)
-            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8), treap.getKeys())
+            assertEquals(6, treap.size)
+            assertEquals(listOf(1, 2, 3, 4, 5, 8), treap.getKeys())
+            assertEquals(
+                listOf(1 to "A", 2 to "B", 3 to "C", 4 to "D", 5 to "e", 8 to "H"), treap.getEntities()
+            )
         }
 
         @Test
