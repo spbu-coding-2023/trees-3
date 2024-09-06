@@ -36,28 +36,53 @@ class TreapTest{
     @Nested
     inner class `Insert tests` {
 
-        @Test
-        fun `set new min key`() {
+        @BeforeEach
+        fun setup() {
             treap = Treap(
                 arrayOf(
-                    Pair(2, "B"), Pair(3, "C"), Pair(4, "D"),
-                    Pair(6, "F"), Pair(7, "G"), Pair(8, "H")
+                    Pair(1, "A"), Pair(2, "B"), Pair(3, "C"),
+                    Pair(4, "D"), Pair(5, "E"), Pair(8, "H")
                 )
             )
+        }
 
-            treap.set(1, "A")
+        @Test
+        fun `set new min key`() {
+            treap.set(0, "Z")
+
             assertEquals(7, treap.size)
-            assertEquals(
-                listOf(
-                    Pair(1, "A"), Pair(2, "B"), Pair(3, "C"), Pair(4, "D"),
-                    Pair(6, "F"), Pair(7, "G"), Pair(8, "H")
-                ), treap.getEntities()
-            )
+            assertEquals(listOf(0, 1, 2, 3, 4, 5, 8), treap.getKeys())
+        }
+
+
+        @Test
+        fun `set new max key`() {
+            treap.set(9, "I")
+
+            assertEquals(7, treap.size)
+            assertEquals(listOf(1, 2, 3, 4, 5, 8, 9), treap.getKeys())
+        }
+
+        @Test
+        fun `set new key inside tree`() {
+            treap.set(6, "F")
+
+            assertEquals(7, treap.size)
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8), treap.getKeys())
+        }
+
+        @Test
+        fun `set the same key`() {
+            treap.set(5, "E")
+
+            assertEquals(7, treap.size)
+            assertEquals(listOf(1, 2, 3, 4, 5, 6, 8), treap.getKeys())
         }
 
         @Test
         fun `set key in empty tree`() {
             treapEmpty.set(1, "A")
+
             assertEquals(listOf(Pair(1, "A")), treapEmpty.getEntities())
             assertEquals(1, treapEmpty.size)
         }
