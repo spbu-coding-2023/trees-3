@@ -9,13 +9,18 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
     constructor(key: K, value: V) : super(key, value)
     constructor(pairs: Array<Pair<K, V>>) : super(pairs)
 
-    private var allPriors = mutableListOf(0)
+    private var allPriors = mutableListOf<Int>(0)
 
     private fun generatePrior(node: TreapNode<K, V>) {
-        when {
-            node.prior == 0 -> node.prior = Random.nextInt()
-            allPriors.contains(node.prior) == true -> generatePrior(node)
-            else -> allPriors.add(node.prior)
+
+        if (node.prior == 0) {
+            node.prior = Random.nextInt()
+        }
+
+        if (allPriors.contains(node.prior)){
+            generatePrior(node)
+        } else {
+            allPriors.add(node.prior)
         }
     }
 
