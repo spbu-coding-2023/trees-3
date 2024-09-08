@@ -6,10 +6,14 @@ import kotlin.random.Random
 class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
 
     constructor() : super()
-    constructor(key: K, value: V) : super(key, value)
-    constructor(pairs: Array<Pair<K, V>>) : super(pairs)
+    constructor(key: K, value: V) {
+        set(key,value)
+    }
+    constructor(pairs: Array<Pair<K, V>>) : this() {
+        set(pairs)
+    }
 
-    private var allPriors = mutableListOf<Int>(0)
+    private var allPriors = mutableListOf(0)
 
     private fun generatePrior(node: TreapNode<K, V>) {
 
