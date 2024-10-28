@@ -16,7 +16,6 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
     private var allPriors = mutableListOf(0)
 
     private fun generatePrior(node: TreapNode<K, V>) {
-
         if (node.prior == 0) {
             node.prior = Random.nextInt()
         }
@@ -29,32 +28,26 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
     }
 
     private fun merge(nodeL: TreapNode<K, V>?, nodeR: TreapNode<K, V>?) : TreapNode<K, V>? {
-        if (nodeL == null && nodeR == null) {
-            root = null
-            return root
-        }
-        if (nodeL == null) {
-            root = nodeR
-            return root
-        }
-        if (nodeR == null) {
-            root = nodeL
-            return root
+        if (nodeL == null || nodeR == null) {
+            return nodeL ?: nodeR
         }
 
         if (nodeL.prior > nodeR.prior){
             nodeL.right = merge(nodeL.right, nodeR)
-            return nodeL.right
+
+            return nodeL
+
         } else {
             nodeR.left = merge(nodeL, nodeR.left)
-            return nodeR.left
+
+            return nodeR
         }
     }
 
     private fun split(node: TreapNode<K, V>?, key: K) : Pair<TreapNode<K, V>?, TreapNode<K, V>?> {
         if (node == null) return Pair(null,null)
 
-        else if (key > node.key) {
+        if (key > node.key) {
             val splitRezult = split(node.right, key)
             node.right = splitRezult.first
 
@@ -92,14 +85,16 @@ class Treap <K : Comparable<K>, V> : SearchTree<K, V, TreapNode<K, V>> {
         generatePrior(node)
 
         val splitTrees = split(root, node.key)
-        merge(merge(splitTrees.first, node), splitTrees.second)
+        root = merge(merge(splitTrees.first, node), splitTrees.second)
     }
 
     override fun removeNode(node: TreapNode<K, V>) {
         allPriors.remove(node.prior)
 
+        val mergeTree = merge(node.left, node.right)
         val parentNode = root?.let { searchParentNode(node, it) }
-        identifyChild(parentNode, node, merge(node.right, node.right))
+
+        identifyChild(parentNode, node, mergeTree)
     }
 
     override fun createNode(key: K, value: V): TreapNode<K, V> = TreapNode(key, value)
